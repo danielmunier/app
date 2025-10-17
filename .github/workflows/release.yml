@@ -1,42 +1,48 @@
-name: Build and Release Electron App
+name: Build and Release Electron App (Bun)
 
-# Dispara apenas quando você criar uma tag como v0.1.0
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*' # dispara quando você faz push de uma tag tipo v1.0.0
+  workflow_dispatch: # opcional, para rodar manualmente
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      # Faz checkout do código
-      - uses: actions/checkout@v3
+      # Checkout do código
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Configura Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      # Instala o Bun
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20
+          bun-version: latest
 
       # Instala dependências
       - name: Install dependencies
-        run: npm install
+        run: bun install
 
-      # Build do front-end (Vite/React)
-      - name: Build front-end
-        run: npm run build
+      # Build front-end (React/Vite, se aplicável)
+      - name: Build frontend
+        run: bun run build
 
-      # Build do Electron
-      - name: Build Electron
-        run: npm run build:electron
-
-      # Cria release no GitHub e faz upload do instalador
-      - name: Create GitHub Release and upload installer
-        uses: softprops/action-gh-release@v1
-        with:
-          files: "release/*.*"
-          tag_name: ${{ github.ref_name }} # pega a tag que disparou o workflow
+      # Build do Electron (gera instaladores)
+      - name: Build Electron app
+        run: bun run build:electron
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NODE_ENV: production
+
+      # Cria Release no GitHub e envia os artefatos
+      - name: Create GitHub Release and upload artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            release/*.exe
+            release/*.zip
+            release/*.yml
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
