@@ -1,68 +1,91 @@
-const { app, BrowserWindow, dialog } = require('electron');
-const path = require('path');
-const { autoUpdater } = require('electron-updater');
+// main.cjs
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const path = require("path");
+const { autoUpdater } = require("electron-updater");
 
-let mainWindow;
+// Cria a janela principal
+
+
+// ... resto do código ...
+
+ipcMain.handle("get-app-version", () => {
+  return app.getVersion();
+});
+
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
+  const win = new BrowserWindow({
     width: 1000,
     height: 700,
-    frame: false, // custom title bar
+    frame: false,
     webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
 
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:5173');
+  // carrega o front-end (vite dev ou build)
+  if (process.env.NODE_ENV === "development") {
+    win.loadURL("http://localhost:5173");
   } else {
-    mainWindow.loadFile(path.join(__dirname, 'dist/index.html'));
+    win.loadFile(path.join(__dirname, "dist/index.html"));
   }
+
+  // win.webContents.openDevTools();
+
+  // Verifica se há atualizações após a janela abrir
+  win.once("ready-to-show", () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 }
 
-// App ready
+// App pronto
 app.whenReady().then(() => {
   createWindow();
 
-  // Auto-update
-  autoUpdater.checkForUpdatesAndNotify();
-});
-
-// Eventos do auto-updater
-autoUpdater.on('checking-for-update', () => {
-  console.log('Verificando atualizações...');
-});
-
-autoUpdater.on('update-available', (info) => {
-  console.log('Nova atualização disponível!', info.version);
-});
-
-autoUpdater.on('update-not-available', () => {
-  console.log('Nenhuma atualização disponível');
-});
-
-autoUpdater.on('error', (err) => {
-  console.error('Erro no auto-update:', err);
-});
-
-autoUpdater.on('download-progress', (progress) => {
-  console.log(`Baixando: ${Math.floor(progress.percent)}%`);
-});
-
-autoUpdater.on('update-downloaded', () => {
-  const result = dialog.showMessageBoxSync(mainWindow, {
-    type: 'info',
-    buttons: ['Reiniciar', 'Depois'],
-    title: 'Atualização disponível',
-    message: 'Nova versão baixada. Reinicie para aplicar.',
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
-
-  if (result === 0) autoUpdater.quitAndInstall();
 });
 
-// Fechar app
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+// Fecha tudo se não for mac
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
+});
+
+/* -------------------- AUTO UPDATER CONFIG -------------------- */
+
+// Isso é opcional — define o repositório explicitamente
+autoUpdater.setFeedURL({
+  provider: "github",
+  owner: "danielmunier", // seu usuário GitHub
+  repo: "app",           // nome do repositório
+});
+
+// Eventos úteis
+autoUpdater.on("update-available", () => {
+  console.log("🟢 Atualização disponível! Baixando...");
+});
+
+autoUpdater.on("update-not-available", () => {
+  console.log("✅ Nenhuma atualização nova encontrada.");
+});
+
+autoUpdater.on("error", (err) => {
+  console.error("❌ Erro ao buscar atualização:", err);
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+  console.log("⬇️ Atualização baixada, aplicando...");
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "Atualização disponível",
+      message: "Uma nova versão foi baixada. Deseja reiniciar agora para atualizar?",
+      buttons: ["Sim", "Mais tarde"],
+    })
+    .then((result) => {
+      if (result.response === 0) autoUpdater.quitAndInstall();
+    });
 });

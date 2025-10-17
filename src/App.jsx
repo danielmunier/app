@@ -1,8 +1,15 @@
+import { useEffect, useState } from 'react'
 import './App.css'
 import StarryBackground from './components/Background'
 import TitleBar from './components/TitleBar'
 
 function App() {
+  const [version, setVersion] = useState("")
+   useEffect(() => {
+    window.require("electron").ipcRenderer.invoke("get-app-version").then((v) => {
+      setVersion(v);
+    });
+  }, []);
   return (
     <div style={{
       width: "100%",
@@ -29,6 +36,9 @@ function App() {
           overflowY: "auto",   // habilita scroll apenas nesta área
         }}
       >
+         <div style={{ position: "fixed", bottom: 10, right: 10, color: "#888", fontSize: 12 }}>
+      v{version}
+    </div>
         <div>
           <div>
 
