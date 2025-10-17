@@ -1,35 +1,42 @@
 name: Build and Release Electron App
 
+# Dispara apenas quando você criar uma tag como v0.1.0
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
+      # Faz checkout do código
       - uses: actions/checkout@v3
 
+      # Configura Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      # Instala dependências
       - name: Install dependencies
         run: npm install
 
+      # Build do front-end (Vite/React)
       - name: Build front-end
         run: npm run build
 
+      # Build do Electron
       - name: Build Electron
         run: npm run build:electron
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}  
 
-      - name: Upload Installer
+      # Cria release no GitHub e faz upload do instalador
+      - name: Create GitHub Release and upload installer
         uses: softprops/action-gh-release@v1
         with:
-          files: "release/MeuApp Setup *.exe"
+          files: "release/*.*"
+          tag_name: ${{ github.ref_name }} # pega a tag que disparou o workflow
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
