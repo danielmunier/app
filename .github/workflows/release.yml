@@ -25,15 +25,14 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      # Build front-end (React/Vite, se aplicável)
       - name: Build frontend
         run: bun run build
 
-      # Build do Electron (gera instaladores)
       - name: Build Electron app
         run: bun run build:electron
         env:
           NODE_ENV: production
+
 
       # Cria Release no GitHub e envia os artefatos
       - name: Create GitHub Release and upload artifacts
