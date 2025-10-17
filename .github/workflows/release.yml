@@ -6,46 +6,47 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      # Checkout do código
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Instala o Bun
+  
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      # Instala dependências
       - name: Install dependencies
         run: bun install
 
-      # Build frontend (Vite/React)
+    
       - name: Build frontend
         run: bun run build
 
-      # Build do Electron (gera instalador e publica release)
+
       - name: Build Electron app
         run: |
-          $env:GH_TOKEN='${{ secrets.GH_TOKEN }}'   # passa o token pro electron-builder
+          $env:GH_TOKEN='${{ secrets.GITHUB_TOKEN }}'   # 👈 usa o token interno do Actions
           bun run build:electron
         shell: pwsh
         env:
           NODE_ENV: production
 
-      # Cria Release no GitHub (caso queira subir manualmente os artefatos)
+   
       - name: Create GitHub Release and upload artifacts
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}           
           tag_name: ${{ github.ref_name }}
           files: |
             release/*.exe
-            release/*.zip
             release/*.yml
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          overwrite: true
