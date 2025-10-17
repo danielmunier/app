@@ -41,7 +41,6 @@ function App() {
     </div>
         <div>
           <div>
-test
           </div>
 
           <section 
