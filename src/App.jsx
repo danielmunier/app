@@ -5,29 +5,23 @@ import TitleBar from './components/TitleBar'
 
 function App() {
   const [version, setVersion] = useState("")
-  const [updateStatus, setUpdateStatus] = useState("") // mostra status na UI
+  const [updateStatus, setUpdateStatus] = useState("") 
 
   useEffect(() => {
-    // Verifica se a API do Electron está disponível
     if (window.electronAPI) {
-      // pega versão atual do app
       window.electronAPI.getAppVersion().then((v) => setVersion(v));
 
-      // escuta quando o updater avisa que há nova versão
       window.electronAPI.onUpdateAvailable(() => {
         setUpdateStatus("🟡 Nova atualização disponível! Baixando...");
       });
 
-      // escuta quando a atualização termina de baixar
       window.electronAPI.onUpdateDownloaded(() => {
         setUpdateStatus("🟢 Atualização baixada! O app será reiniciado...");
-        // opcional: forçar reinício após 3 segundos
         setTimeout(() => {
-          window.electronAPI.checkForUpdates(); // ou pode chamar ipc para instalar
+          window.electronAPI.checkForUpdates(); 
         }, 3000);
       });
     } else {
-      // Fallback para quando não estiver no Electron
       setVersion("Web Version");
     }
   }, []);
@@ -44,7 +38,6 @@ function App() {
       <StarryBackground />
       <TitleBar />
 
-      {/* Área principal */}
       <main
         className="main-app"
         style={{
@@ -60,7 +53,6 @@ function App() {
           overflowY: "auto",
         }}
       >
-        {/* Status do update */}
         {updateStatus && (
           <div
             style={{
