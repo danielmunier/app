@@ -13,31 +13,83 @@ function App() {
     if (window.electronAPI) {
       window.electronAPI.getAppVersion().then((v) => setVersion(v));
 
-      // Verificar atualizações ao carregar
-      setIsCheckingUpdate(true);
-      window.electronAPI.checkForUpdates();
+      // Timeout de segurança para parar o loading
+      let timeoutId = null;
 
-      window.electronAPI.onUpdateAvailable(() => {
-        setUpdateStatus("🟡 Nova atualização disponível! Baixando...");
+      const setupTimeout = () => {
+        timeoutId = setTimeout(() => {
+          setIsCheckingUpdate(false);
+          if (!updateAvailable) {
+            setUpdateStatus("⏰ Timeout - Verificação demorou muito. Tente novamente.");
+          }
+        }, 15000); // 15 segundos
+      };
+
+      // Event listeners para atualizações
+      window.electronAPI.onCheckingForUpdate(() => {
+        console.log('🔍 Verificando atualizações...');
+        setIsCheckingUpdate(true);
+        setUpdateStatus("🔍 Verificando atualizações...");
+        setUpdateAvailable(false);
+        setupTimeout();
+      });
+
+      window.electronAPI.onUpdateAvailable((info) => {
+        console.log('🟢 Atualização disponível!', info);
+        clearTimeout(timeoutId);
+        const version = info?.version || 'Nova versão';
+        setUpdateStatus(`🟡 Nova atualização disponível! (v${version}) Baixando...`);
         setUpdateAvailable(true);
         setIsCheckingUpdate(false);
       });
 
-      window.electronAPI.onUpdateDownloaded(() => {
+      window.electronAPI.onUpdateDownloaded((info) => {
+        console.log('⬇️ Atualização baixada!', info);
+        clearTimeout(timeoutId);
         setUpdateStatus("🟢 Atualização baixada! O app será reiniciado...");
         setUpdateAvailable(true);
-        setTimeout(() => {
-          window.electronAPI.checkForUpdates();
-        }, 3000);
+        setIsCheckingUpdate(false);
       });
 
-      // Adicionar timeout para parar o loading
-      setTimeout(() => {
-        if (!updateAvailable) {
-          setIsCheckingUpdate(false);
-          setUpdateStatus("✅ Você está usando a versão mais recente!");
+      window.electronAPI.onUpdateNotAvailable((info) => {
+        console.log('✅ Nenhuma atualização nova.', info);
+        clearTimeout(timeoutId);
+        setUpdateStatus("✅ Você está usando a versão mais recente!");
+        setUpdateAvailable(false);
+        setIsCheckingUpdate(false);
+      });
+
+      window.electronAPI.onUpdateError((error) => {
+        console.error('❌ Erro na verificação de atualizações:', error);
+        clearTimeout(timeoutId);
+        
+        let errorMessage = 'Erro desconhecido';
+        if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error && typeof error === 'object') {
+          errorMessage = error.message || error.toString();
         }
-      }, 5000);
+        
+        // Tratar erros específicos
+        if (errorMessage.includes('ENOENT')) {
+          errorMessage = 'Arquivo de configuração não encontrado';
+        } else if (errorMessage.includes('network')) {
+          errorMessage = 'Erro de conexão com o servidor';
+        } else if (errorMessage.includes('timeout')) {
+          errorMessage = 'Timeout na verificação de atualizações';
+        }
+        
+        setUpdateStatus(`❌ Erro: ${errorMessage}`);
+        setUpdateAvailable(false);
+        setIsCheckingUpdate(false);
+      });
+
+      // Verificar atualizações apenas uma vez ao carregar
+      window.electronAPI.checkForUpdates();
+
+      return () => {
+        if (timeoutId) clearTimeout(timeoutId);
+      };
     } else {
       setVersion("Web Version");
       setUpdateStatus("🌐 Modo Web - Atualizações automáticas não disponíveis");
@@ -122,22 +174,24 @@ function App() {
           {window.electronAPI && (
             <button
               onClick={() => {
-                setIsCheckingUpdate(true);
-                setUpdateStatus("");
+                if (isCheckingUpdate) return; // Evitar múltiplas verificações
+                console.log('🔍 Verificação manual iniciada');
                 window.electronAPI.checkForUpdates();
               }}
+              disabled={isCheckingUpdate}
               style={{
-                backgroundColor: "#646cff",
+                backgroundColor: isCheckingUpdate ? "#555" : "#646cff",
                 color: "white",
                 border: "none",
                 padding: "10px 20px",
                 borderRadius: "6px",
-                cursor: "pointer",
+                cursor: isCheckingUpdate ? "not-allowed" : "pointer",
                 marginTop: "10px",
                 fontSize: "14px",
+                opacity: isCheckingUpdate ? 0.6 : 1,
               }}
             >
-              🔍 Verificar Atualizações Agora
+              {isCheckingUpdate ? "🔄 Verificando..." : "🔍 Verificar Atualizações Agora"}
             </button>
           )}
         </section>

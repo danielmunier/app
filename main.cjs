@@ -2,6 +2,9 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 
+// Variável global para armazenar a janela principal
+let mainWindow = null;
+
 ipcMain.handle('get-app-version', () => app.getVersion());
 
 ipcMain.on('check-for-updates', () => autoUpdater.checkForUpdatesAndNotify());
@@ -18,6 +21,9 @@ function createWindow() {
       nodeIntegration: false, 
     },
   });
+
+  // Armazenar referência da janela
+  mainWindow = win;
 
   if (!app.isPackaged) {
     win.loadURL('http://localhost:5173');
@@ -75,20 +81,52 @@ autoUpdater.setFeedURL({
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
 
+// Forçar verificação de updates mesmo em desenvolvimento
+if (!app.isPackaged) {
+  autoUpdater.forceDevUpdateConfig = true;
+}
+
 autoUpdater.on('checking-for-update', () => {
   console.log('🔍 Verificando atualizações...');
+  // Notificar o frontend que está verificando
+  if (mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.send('checking-for-update');
+  }
 });
 
 autoUpdater.on('update-available', (info) => {
   console.log('🟢 Atualização disponível!', info);
+  // Notificar o frontend que há atualização disponível
+  if (mainWindow && mainWindow.webContents) {
+    // Enviar apenas dados serializáveis
+    const updateInfo = {
+      version: info.version,
+      releaseName: info.releaseName,
+      releaseDate: info.releaseDate
+    };
+    mainWindow.webContents.send('update-available', updateInfo);
+  }
 });
 
 autoUpdater.on('update-not-available', (info) => {
   console.log('✅ Nenhuma atualização nova.', info);
+  // Notificar o frontend que não há atualização
+  if (mainWindow && mainWindow.webContents) {
+    // Enviar apenas dados serializáveis
+    const updateInfo = {
+      version: info?.version || 'N/A',
+      releaseName: info?.releaseName || 'N/A'
+    };
+    mainWindow.webContents.send('update-not-available', updateInfo);
+  }
 });
 
 autoUpdater.on('error', (err) => {
   console.error('❌ Erro no auto-updater:', err);
+  // Notificar o frontend sobre o erro
+  if (mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.send('update-error', err.message);
+  }
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
@@ -100,6 +138,17 @@ autoUpdater.on('download-progress', (progressObj) => {
 
 autoUpdater.on('update-downloaded', (info) => {
   console.log('⬇️ Atualização baixada!', info);
+  // Notificar o frontend que a atualização foi baixada
+  if (mainWindow && mainWindow.webContents) {
+    // Enviar apenas dados serializáveis
+    const updateInfo = {
+      version: info.version,
+      releaseName: info.releaseName,
+      releaseDate: info.releaseDate
+    };
+    mainWindow.webContents.send('update-downloaded', updateInfo);
+  }
+  
   dialog
     .showMessageBox({
       type: 'info',
