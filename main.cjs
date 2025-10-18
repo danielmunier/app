@@ -74,15 +74,36 @@ autoUpdater.setFeedURL({
   repo: 'app',
 });
 
-// Logs simples
-autoUpdater.on('update-available', () => {
-  console.log('🟢 Atualização disponível!');
+// Configurações adicionais do autoUpdater
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+
+// Logs e eventos do autoUpdater
+autoUpdater.on('checking-for-update', () => {
+  console.log('🔍 Verificando atualizações...');
 });
-autoUpdater.on('update-not-available', () => {
-  console.log('✅ Nenhuma atualização nova.');
+
+autoUpdater.on('update-available', (info) => {
+  console.log('🟢 Atualização disponível!', info);
 });
+
+autoUpdater.on('update-not-available', (info) => {
+  console.log('✅ Nenhuma atualização nova.', info);
+});
+
+autoUpdater.on('error', (err) => {
+  console.error('❌ Erro no auto-updater:', err);
+});
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Velocidade de download: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  console.log(log_message);
+});
+
 autoUpdater.on('update-downloaded', (info) => {
-  console.log('⬇️ Atualização baixada!');
+  console.log('⬇️ Atualização baixada!', info);
   dialog
     .showMessageBox({
       type: 'info',
