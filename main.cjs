@@ -2,10 +2,8 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 
-// IPC para pegar versão
 ipcMain.handle('get-app-version', () => app.getVersion());
 
-// opcional: canal pra updates
 ipcMain.on('check-for-updates', () => autoUpdater.checkForUpdatesAndNotify());
 
 function createWindow() {
@@ -16,8 +14,8 @@ function createWindow() {
     show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true, // 🧱 mantém segurança
-      nodeIntegration: false, // 🚫 não injeta Node no front
+      contextIsolation: true, 
+      nodeIntegration: false, 
     },
   });
 
@@ -74,11 +72,9 @@ autoUpdater.setFeedURL({
   repo: 'app',
 });
 
-// Configurações adicionais do autoUpdater
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
 
-// Logs e eventos do autoUpdater
 autoUpdater.on('checking-for-update', () => {
   console.log('🔍 Verificando atualizações...');
 });
