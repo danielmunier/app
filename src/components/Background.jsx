@@ -98,8 +98,7 @@ export default function StarryBackground() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
+    <div
       style={{
         position: "fixed",
         top: 0,
@@ -107,8 +106,20 @@ export default function StarryBackground() {
         width: "100%",
         height: "100%",
         zIndex: -1,
-        background: "black",
+        background: "radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)",
       }}
-    />
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "transparent",
+        }}
+      />
+    </div>
   );
 }

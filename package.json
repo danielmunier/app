@@ -45,6 +45,7 @@
     "files": [
       "dist/**/*",
       "main.cjs",
+      "preload.js",
       "package.json"
     ],
     "publish": [

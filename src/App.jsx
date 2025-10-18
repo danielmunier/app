@@ -5,27 +5,51 @@ import TitleBar from './components/TitleBar'
 
 function App() {
   const [version, setVersion] = useState("")
-   useEffect(() => {
-    window.require("electron").ipcRenderer.invoke("get-app-version").then((v) => {
-      setVersion(v);
-    });
+  const [updateStatus, setUpdateStatus] = useState("") // mostra status na UI
+
+  useEffect(() => {
+    // Verifica se a API do Electron está disponível
+    if (window.electronAPI) {
+      // pega versão atual do app
+      window.electronAPI.getAppVersion().then((v) => setVersion(v));
+
+      // escuta quando o updater avisa que há nova versão
+      window.electronAPI.onUpdateAvailable(() => {
+        setUpdateStatus("🟡 Nova atualização disponível! Baixando...");
+      });
+
+      // escuta quando a atualização termina de baixar
+      window.electronAPI.onUpdateDownloaded(() => {
+        setUpdateStatus("🟢 Atualização baixada! O app será reiniciado...");
+        // opcional: forçar reinício após 3 segundos
+        setTimeout(() => {
+          window.electronAPI.checkForUpdates(); // ou pode chamar ipc para instalar
+        }, 3000);
+      });
+    } else {
+      // Fallback para quando não estiver no Electron
+      setVersion("Web Version");
+    }
   }, []);
+
   return (
-    <div style={{
-      width: "100%",
-      height: "100vh",
-      position: "relative",
-      overflow: "hidden"
-    }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
       <StarryBackground />
       <TitleBar />
 
-      {/* Área de conteúdo que vai rolar */}
+      {/* Área principal */}
       <main
-        className='main-app'
+        className="main-app"
         style={{
           position: "absolute",
-          top: "30px", // começa logo abaixo do titlebar
+          top: "30px",
           left: 0,
           right: 0,
           bottom: 0,
@@ -33,23 +57,37 @@ function App() {
           color: "white",
           textAlign: "center",
           padding: "20px",
-          overflowY: "auto",   // habilita scroll apenas nesta área
+          overflowY: "auto",
         }}
       >
-         <div style={{ position: "fixed", bottom: 10, right: 10, color: "#888", fontSize: 12 }}>
-      v{version}
-    </div>
-        <div>
-          <div>
-          </div>
-
-          <section 
+        {/* Status do update */}
+        {updateStatus && (
+          <div
+            style={{
+              backgroundColor: "#222",
+              border: "1px solid #555",
+              padding: "10px 20px",
+              borderRadius: 6,
+              display: "inline-block",
+              marginBottom: 20,
+            }}
           >
-          testing update for working release workflow
+            {updateStatus}
+          </div>
+        )}
 
-          </section>
+        <section>testing update for working release workflow</section>
 
-
+        <div
+          style={{
+            position: "fixed",
+            bottom: 10,
+            right: 10,
+            color: "#888",
+            fontSize: 12,
+          }}
+        >
+          v{version}
         </div>
       </main>
     </div>

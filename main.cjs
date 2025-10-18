@@ -1,89 +1,95 @@
-// main.cjs
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const path = require("path");
-const { autoUpdater } = require("electron-updater");
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const path = require('path');
+const { autoUpdater } = require('electron-updater');
 
-// Cria a janela principal
+// IPC para pegar versão
+ipcMain.handle('get-app-version', () => app.getVersion());
 
-
-// ... resto do código ...
-
-ipcMain.handle("get-app-version", () => {
-  return app.getVersion();
-});
-
+// opcional: canal pra updates
+ipcMain.on('check-for-updates', () => autoUpdater.checkForUpdatesAndNotify());
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 1000,
     height: 700,
     frame: false,
+    show: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: true,
-      contextIsolation: false,
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true, // 🧱 mantém segurança
+      nodeIntegration: false, // 🚫 não injeta Node no front
     },
   });
 
-  // carrega o front-end (vite dev ou build)
-  if (process.env.NODE_ENV === "development") {
-    win.loadURL("http://localhost:5173");
+  if (!app.isPackaged) {
+    win.loadURL('http://localhost:5173');
+    win.webContents.openDevTools();
   } else {
-    win.loadFile(path.join(__dirname, "dist/index.html"));
+    win.loadFile(path.join(__dirname, 'dist/index.html'));
   }
 
-  // win.webContents.openDevTools();
-
-  // Verifica se há atualizações após a janela abrir
-  win.once("ready-to-show", () => {
+  win.once('ready-to-show', () => {
+    win.show();
     autoUpdater.checkForUpdatesAndNotify();
   });
+
+  return win;
 }
 
-// App pronto
+
+
 app.whenReady().then(() => {
   createWindow();
-
-  app.on("activate", () => {
+  app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-// Fecha tudo se não for mac
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+
+ipcMain.on('window-minimize', () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.minimize();
 });
 
-/* -------------------- AUTO UPDATER CONFIG -------------------- */
+ipcMain.on('window-maximize', () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) {
+    if (win.isMaximized()) win.unmaximize();
+    else win.maximize();
+  }
+});
 
-// Isso é opcional — define o repositório explicitamente
+ipcMain.on('window-close', () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.close();
+});
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+// Feed pro autoUpdater (GitHub Releases)
 autoUpdater.setFeedURL({
-  provider: "github",
-  owner: "danielmunier", // seu usuário GitHub
-  repo: "app",           // nome do repositório
+  provider: 'github',
+  owner: 'danielmunier',
+  repo: 'app',
 });
 
-// Eventos úteis
-autoUpdater.on("update-available", () => {
-  console.log("🟢 Atualização disponível! Baixando...");
+// Logs simples
+autoUpdater.on('update-available', () => {
+  console.log('🟢 Atualização disponível!');
 });
-
-autoUpdater.on("update-not-available", () => {
-  console.log("✅ Nenhuma atualização nova encontrada.");
+autoUpdater.on('update-not-available', () => {
+  console.log('✅ Nenhuma atualização nova.');
 });
-
-autoUpdater.on("error", (err) => {
-  console.error("❌ Erro ao buscar atualização:", err);
-});
-
-autoUpdater.on("update-downloaded", (info) => {
-  console.log("⬇️ Atualização baixada, aplicando...");
+autoUpdater.on('update-downloaded', (info) => {
+  console.log('⬇️ Atualização baixada!');
   dialog
     .showMessageBox({
-      type: "info",
-      title: "Atualização disponível",
-      message: "Uma nova versão foi baixada. Deseja reiniciar agora para atualizar?",
-      buttons: ["Sim", "Mais tarde"],
+      type: 'info',
+      title: 'Atualização disponível',
+      message:
+        'Uma nova versão foi baixada. Deseja reiniciar agora para atualizar?',
+      buttons: ['Sim', 'Mais tarde'],
     })
     .then((result) => {
       if (result.response === 0) autoUpdater.quitAndInstall();
