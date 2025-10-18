@@ -5,6 +5,7 @@ export const useUpdater = () => {
   const [updateStatus, setUpdateStatus] = useState("");
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [newVersion, setNewVersion] = useState("");
 
   // Função para limpar listeners
   const cleanupListeners = useCallback(() => {
@@ -42,14 +43,15 @@ export const useUpdater = () => {
       setupTimeout();
     });
 
-    window.electronAPI.onUpdateAvailable((info) => {
-      console.log('🟢 Atualização disponível!', info);
-      clearTimeout(timeoutId);
-      const version = info?.version || 'Nova versão';
-      setUpdateStatus(`🟡 Nova atualização disponível! (v${version}) Baixando...`);
-      setUpdateAvailable(true);
-      setIsCheckingUpdate(false);
-    });
+      window.electronAPI.onUpdateAvailable((info) => {
+        console.log('🟢 Atualização disponível!', info);
+        clearTimeout(timeoutId);
+        const newVer = info?.version || info?.releaseName || 'Nova versão';
+        setNewVersion(newVer);
+        setUpdateStatus(`🟡 Nova atualização disponível! (v${newVer}) Baixando...`);
+        setUpdateAvailable(true);
+        setIsCheckingUpdate(false);
+      });
 
     window.electronAPI.onUpdateDownloaded((info) => {
       console.log('⬇️ Atualização baixada!', info);
@@ -116,7 +118,7 @@ export const useUpdater = () => {
       // Configurar listeners
       const cleanup = setupListeners();
       
-      // Verificar atualizações automaticamente
+      // Verificar atualizações automaticamente apenas uma vez
       window.electronAPI.checkForUpdates();
 
       return () => {
@@ -127,13 +129,23 @@ export const useUpdater = () => {
       setVersion("Web Version");
       setUpdateStatus("🌐 Modo Web - Atualizações automáticas não disponíveis");
     }
-  }, [setupListeners, cleanupListeners]);
+  }, []); // Remover dependências para evitar re-execução
+
+  // Função para iniciar download manual
+  const downloadUpdate = useCallback(() => {
+    if (window.electronAPI && updateAvailable) {
+      console.log('🔄 Iniciando download manual...');
+      window.electronAPI.downloadUpdate();
+    }
+  }, [updateAvailable]);
 
   return {
     version,
     updateStatus,
     isCheckingUpdate,
     updateAvailable,
-    checkForUpdates
+    newVersion,
+    checkForUpdates,
+    downloadUpdate
   };
 };

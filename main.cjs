@@ -9,6 +9,16 @@ ipcMain.handle('get-app-version', () => app.getVersion());
 
 ipcMain.on('check-for-updates', () => autoUpdater.checkForUpdatesAndNotify());
 
+// Handler para iniciar download manual
+ipcMain.on('download-update', () => {
+  if (autoUpdater.downloadPromise) {
+    console.log('Download já em andamento...');
+  } else {
+    console.log('🔄 Iniciando download da atualização...');
+    autoUpdater.downloadUpdate();
+  }
+});
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1000,
@@ -78,7 +88,7 @@ autoUpdater.setFeedURL({
   repo: 'app',
 });
 
-autoUpdater.autoDownload = true;
+autoUpdater.autoDownload = false; // Desabilitar download automático
 autoUpdater.autoInstallOnAppQuit = true;
 
 // Forçar verificação de updates mesmo em desenvolvimento

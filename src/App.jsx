@@ -4,7 +4,7 @@ import TitleBar from './components/TitleBar'
 import { useUpdater } from './hooks/useUpdater'
 
 function App() {
-  const { version, updateStatus, isCheckingUpdate, updateAvailable, checkForUpdates } = useUpdater();
+  const { version, updateStatus, isCheckingUpdate, updateAvailable, newVersion, checkForUpdates, downloadUpdate } = useUpdater();
 
   return (
     <div
@@ -72,7 +72,8 @@ function App() {
 
           {updateAvailable && (
             <div style={{ marginTop: 10, fontSize: "12px", opacity: 0.8 }}>
-              Uma janela de confirmação aparecerá quando a atualização estiver pronta
+              <div>📦 Nova versão disponível: <strong>v{newVersion}</strong></div>
+              <div>📥 Uma janela de confirmação aparecerá quando a atualização estiver pronta</div>
             </div>
           )}
         </div>
@@ -82,23 +83,41 @@ function App() {
           <p>O app verifica automaticamente por atualizações ao iniciar.</p>
           
           {window.electronAPI && (
-            <button
-              onClick={checkForUpdates}
-              disabled={isCheckingUpdate}
-              style={{
-                backgroundColor: isCheckingUpdate ? "#555" : "#646cff",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "6px",
-                cursor: isCheckingUpdate ? "not-allowed" : "pointer",
-                marginTop: "10px",
-                fontSize: "14px",
-                opacity: isCheckingUpdate ? 0.6 : 1,
-              }}
-            >
-              {isCheckingUpdate ? "🔄 Verificando..." : "🔍 Verificar Atualizações Agora"}
-            </button>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
+              <button
+                onClick={checkForUpdates}
+                disabled={isCheckingUpdate}
+                style={{
+                  backgroundColor: isCheckingUpdate ? "#555" : "#646cff",
+                  color: "white",
+                  border: "none",
+                  padding: "10px 20px",
+                  borderRadius: "6px",
+                  cursor: isCheckingUpdate ? "not-allowed" : "pointer",
+                  fontSize: "14px",
+                  opacity: isCheckingUpdate ? 0.6 : 1,
+                }}
+              >
+                {isCheckingUpdate ? "🔄 Verificando..." : "🔍 Verificar Atualizações"}
+              </button>
+              
+              {updateAvailable && (
+                <button
+                  onClick={downloadUpdate}
+                  style={{
+                    backgroundColor: "#4caf50",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                  }}
+                >
+                  ⬇️ Baixar Atualização
+                </button>
+              )}
+            </div>
           )}
         </section>
 
