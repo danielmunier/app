@@ -1,100 +1,10 @@
-import { useEffect, useState } from 'react'
 import './App.css'
 import StarryBackground from './components/Background'
 import TitleBar from './components/TitleBar'
+import { useUpdater } from './hooks/useUpdater'
 
 function App() {
-  const [version, setVersion] = useState("")
-  const [updateStatus, setUpdateStatus] = useState("")
-  const [isCheckingUpdate, setIsCheckingUpdate] = useState(false)
-  const [updateAvailable, setUpdateAvailable] = useState(false) 
-
-  useEffect(() => {
-    if (window.electronAPI) {
-      window.electronAPI.getAppVersion().then((v) => setVersion(v));
-
-      // Timeout de segurança para parar o loading
-      let timeoutId = null;
-
-      const setupTimeout = () => {
-        timeoutId = setTimeout(() => {
-          setIsCheckingUpdate(false);
-          if (!updateAvailable) {
-            setUpdateStatus("⏰ Timeout - Verificação demorou muito. Tente novamente.");
-          }
-        }, 15000); // 15 segundos
-      };
-
-      // Event listeners para atualizações
-      window.electronAPI.onCheckingForUpdate(() => {
-        console.log('🔍 Verificando atualizações...');
-        setIsCheckingUpdate(true);
-        setUpdateStatus("🔍 Verificando atualizações...");
-        setUpdateAvailable(false);
-        setupTimeout();
-      });
-
-      window.electronAPI.onUpdateAvailable((info) => {
-        console.log('🟢 Atualização disponível!', info);
-        clearTimeout(timeoutId);
-        const version = info?.version || 'Nova versão';
-        setUpdateStatus(`🟡 Nova atualização disponível! (v${version}) Baixando...`);
-        setUpdateAvailable(true);
-        setIsCheckingUpdate(false);
-      });
-
-      window.electronAPI.onUpdateDownloaded((info) => {
-        console.log('⬇️ Atualização baixada!', info);
-        clearTimeout(timeoutId);
-        setUpdateStatus("🟢 Atualização baixada! O app será reiniciado...");
-        setUpdateAvailable(true);
-        setIsCheckingUpdate(false);
-      });
-
-      window.electronAPI.onUpdateNotAvailable((info) => {
-        console.log('✅ Nenhuma atualização nova.', info);
-        clearTimeout(timeoutId);
-        setUpdateStatus("✅ Você está usando a versão mais recente!");
-        setUpdateAvailable(false);
-        setIsCheckingUpdate(false);
-      });
-
-      window.electronAPI.onUpdateError((error) => {
-        console.error('❌ Erro na verificação de atualizações:', error);
-        clearTimeout(timeoutId);
-        
-        let errorMessage = 'Erro desconhecido';
-        if (typeof error === 'string') {
-          errorMessage = error;
-        } else if (error && typeof error === 'object') {
-          errorMessage = error.message || error.toString();
-        }
-        
-        // Tratar erros específicos
-        if (errorMessage.includes('ENOENT')) {
-          errorMessage = 'Arquivo de configuração não encontrado';
-        } else if (errorMessage.includes('network')) {
-          errorMessage = 'Erro de conexão com o servidor';
-        } else if (errorMessage.includes('timeout')) {
-          errorMessage = 'Timeout na verificação de atualizações';
-        }
-        
-        setUpdateStatus(`❌ Erro: ${errorMessage}`);
-        setUpdateAvailable(false);
-        setIsCheckingUpdate(false);
-      });
-
-      // Verificar atualizações apenas uma vez ao carregar
-      window.electronAPI.checkForUpdates();
-
-      return () => {
-        if (timeoutId) clearTimeout(timeoutId);
-      };
-    } else {
-      setVersion("Web Version");
-      setUpdateStatus("🌐 Modo Web - Atualizações automáticas não disponíveis");
-    }
-  }, []);
+  const { version, updateStatus, isCheckingUpdate, updateAvailable, checkForUpdates } = useUpdater();
 
   return (
     <div
@@ -173,11 +83,7 @@ function App() {
           
           {window.electronAPI && (
             <button
-              onClick={() => {
-                if (isCheckingUpdate) return; // Evitar múltiplas verificações
-                console.log('🔍 Verificação manual iniciada');
-                window.electronAPI.checkForUpdates();
-              }}
+              onClick={checkForUpdates}
               disabled={isCheckingUpdate}
               style={{
                 backgroundColor: isCheckingUpdate ? "#555" : "#646cff",

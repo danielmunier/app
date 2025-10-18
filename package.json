@@ -1,7 +1,7 @@
 {
   "name": "meu-app",
   "private": true,
-  "version": "0.1.2",
+  "version": "0.1.0",
   "type": "module",
   "main": "main.cjs",
   "scripts": {
@@ -55,6 +55,9 @@
         "repo": "app",
         "private": false
       }
-    ]
+    ],
+    "nsis": {
+      "artifactName": "MeuApp-Setup-${version}.${ext}"
+    }
   }
 }
