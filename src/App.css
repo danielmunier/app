@@ -79,3 +79,9 @@
 .main-app:hover::-webkit-scrollbar-thumb {
   opacity: 1;
 }
+
+/* Animação para o spinner de loading */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
