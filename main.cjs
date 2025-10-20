@@ -126,6 +126,7 @@ autoUpdater.on('update-available', (info) => {
 
 autoUpdater.on('update-not-available', (info) => {
   console.log('✅ Nenhuma atualização nova.');
+  console.log(info)
   if (mainWindow && mainWindow.webContents) {
     const updateInfo = {
       version: info?.version || 'N/A',
