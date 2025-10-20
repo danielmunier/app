@@ -98,7 +98,7 @@ autoUpdater.setFeedURL({
   repo: 'app',
 });
 
-autoUpdater.autoDownload = false; 
+autoUpdater.autoDownload = true; 
 autoUpdater.autoInstallOnAppQuit = true;
 
 if (!app.isPackaged) {
@@ -149,6 +149,10 @@ autoUpdater.on('download-progress', (progressObj) => {
   let log_message = "Velocidade de download: " + progressObj.bytesPerSecond;
   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  console.log('📥 Download progress:', log_message);
+  if (mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.send('download-progress', progressObj);
+  }
 });
 
 autoUpdater.on('update-downloaded', (info) => {
