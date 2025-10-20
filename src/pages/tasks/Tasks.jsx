@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaTrash, FaEdit } from "react-icons/fa";
 import BookCard from "../../components/BookCard/BookCard";
 import { useWeeks } from "../../hooks/useWeeks";
 import Modal from "../../components/Modal/Modal";

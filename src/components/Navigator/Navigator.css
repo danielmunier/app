@@ -20,9 +20,54 @@
     -ms-overflow-style: none;
   }
 
-  /* Esconder o navigator */
+  /* Layout vertical */
+  .cute-nav.vertical {
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 10px;
+    max-width: none;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* Posicionamento vertical - lado direito */
+  .cute-nav.vertical.right {
+    right: 20px;
+    top: 50%;
+    left: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+    border-radius: 12px;
+  }
+
+  /* Posicionamento vertical - lado esquerdo */
+  .cute-nav.vertical.left {
+    left: 20px;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+    border-radius: 12px;
+  }
+
+  /* Esconder o navigator horizontal */
   .cute-nav.hidden {
     transform: translateX(-50%) translateY(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Esconder o navigator vertical - lado direito */
+  .cute-nav.vertical.right.hidden {
+    transform: translateY(-50%) translateX(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Esconder o navigator vertical - lado esquerdo */
+  .cute-nav.vertical.left.hidden {
+    transform: translateY(-50%) translateX(calc(-100% - 40px));
     opacity: 0;
     pointer-events: none;
   }
@@ -45,6 +90,9 @@
     cursor: pointer;
     box-shadow: var(--nav-btn-shadow);
     transition: all 0.25s ease;
+    padding: 0;
+    margin: 0;
+    position: relative;
   }
   
   /* Hover */
@@ -65,13 +113,15 @@
   /* 🌈 Ícone */
   .cute-nav-icon {
     font-size: 32px;
-    margin-bottom: 0px;
+    margin: 0;
+    padding: 0;
     color: var(--nav-text);
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
+    line-height: 1;
     /* Efeito pixel art */
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -102,6 +152,139 @@
 
   .cute-nav-btn.hide-toggle .cute-nav-icon {
     font-size: 20px;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+
+  /* Notificações no Navigator */
+  .cute-nav-btn.notification-toggle {
+    position: relative;
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 9px;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .notification-panel {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    max-height: 400px;
+    background: var(--nav-bg);
+    color: var(--nav-text);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: var(--nav-shadow);
+    z-index: 1000;
+    padding: 8px 0;
+    overflow-y: auto;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Posicionamento do painel de notificações para layout vertical */
+  .cute-nav.vertical.right ~ .notification-panel {
+    right: 100px;
+    left: auto;
+    transform: none;
+    bottom: 50%;
+    top: auto;
+    transform: translateY(50%);
+  }
+
+  .cute-nav.vertical.left ~ .notification-panel {
+    left: 100px;
+    right: auto;
+    transform: none;
+    bottom: 50%;
+    top: auto;
+    transform: translateY(50%);
+  }
+
+  .notification-item {
+    padding: 10px 12px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    cursor: default;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+
+  .notification-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .notification-content {
+    flex: 1;
+    margin-right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .notification-title {
+    font-weight: 500;
+    color: var(--nav-text);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .notification-message {
+    font-size: 11px;
+    color: #bbb;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .notification-time {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .notification-delete-btn {
+    background: transparent;
+    border: none;
+    color: #bbb;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 4px;
+  }
+
+  .notification-delete-btn:hover {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+  }
+
+  .notification-empty {
+    padding: 20px;
+    font-size: 12px;
+    color: #aaa;
+    text-align: center;
   }
 
   /* 📱 Media Queries para Responsividade */
@@ -121,6 +304,23 @@
     
     .cute-nav-icon {
       font-size: 28px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+    }
+
+    /* Ajustes para Navigator vertical em tablets */
+    .cute-nav.vertical {
+      gap: 8px;
+      padding: 12px 8px;
+    }
+
+    .cute-nav.vertical.right {
+      right: 15px;
+    }
+
+    .cute-nav.vertical.left {
+      left: 15px;
     }
   }
 
@@ -141,10 +341,28 @@
     
     .cute-nav-icon {
       font-size: 24px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
     }
     
     .cute-nav-label {
       font-size: 10px;
+    }
+
+    /* Ajustes para Navigator vertical em tablets */
+    .cute-nav.vertical {
+      gap: 6px;
+      padding: 10px 6px;
+      max-width: none;
+    }
+
+    .cute-nav.vertical.right {
+      right: 10px;
+    }
+
+    .cute-nav.vertical.left {
+      left: 10px;
     }
   }
 
@@ -159,19 +377,48 @@
     }
     
     .cute-nav-btn {
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
       border-radius: 8px;
-      min-width: 50px;
+      min-width: 55px;
       flex-shrink: 0;
     }
     
     .cute-nav-icon {
-      font-size: 20px;
+      font-size: 24px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
     }
     
     .cute-nav-label {
       font-size: 9px;
+    }
+
+    /* Ajustes para Navigator vertical em smartphones */
+    .cute-nav.vertical {
+      gap: 4px;
+      padding: 8px 4px;
+      max-width: none;
+      max-height: calc(100vh - 80px);
+    }
+
+    .cute-nav.vertical.right {
+      right: 5px;
+    }
+
+    .cute-nav.vertical.left {
+      left: 5px;
+    }
+
+    .cute-nav.vertical .cute-nav-btn {
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+    }
+
+    .cute-nav.vertical .cute-nav-icon {
+      font-size: 20px;
     }
   }
 
@@ -185,14 +432,17 @@
     }
     
     .cute-nav-btn {
-      width: 45px;
-      height: 45px;
+      width: 50px;
+      height: 50px;
       border-radius: 6px;
-      min-width: 45px;
+      min-width: 50px;
     }
     
     .cute-nav-icon {
-      font-size: 18px;
+      font-size: 22px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
     }
     
     .cute-nav-label {
@@ -209,13 +459,16 @@
     }
     
     .cute-nav-btn {
-      width: 45px;
-      height: 45px;
-      min-width: 45px;
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
     }
     
     .cute-nav-icon {
-      font-size: 18px;
+      font-size: 22px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
     }
     
     .cute-nav-label {
@@ -233,14 +486,17 @@
     }
     
     .cute-nav-btn {
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       border-radius: 5px;
-      min-width: 40px;
+      min-width: 45px;
     }
     
     .cute-nav-icon {
-      font-size: 16px;
+      font-size: 20px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
     }
     
     .cute-nav-label {
@@ -291,6 +547,23 @@
     animation: pulse 2s infinite;
   }
 
+  /* Botão flutuante para layout vertical */
+  .show-navigator-btn.vertical-right {
+    right: 20px;
+    top: 50%;
+    left: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+  }
+
+  .show-navigator-btn.vertical-left {
+    left: 20px;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+  }
+
   .show-navigator-btn:hover {
     transform: translateX(-50%) translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
@@ -299,6 +572,23 @@
 
   .show-navigator-btn:active {
     transform: translateX(-50%) scale(0.95);
+  }
+
+  /* Hover para botão flutuante vertical */
+  .show-navigator-btn.vertical-right:hover {
+    transform: translateY(-50%) translateX(-2px);
+  }
+
+  .show-navigator-btn.vertical-right:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .show-navigator-btn.vertical-left:hover {
+    transform: translateY(-50%) translateX(2px);
+  }
+
+  .show-navigator-btn.vertical-left:active {
+    transform: translateY(-50%) scale(0.95);
   }
 
   @keyframes pulse {
@@ -316,18 +606,18 @@
   /* Responsividade para o botão flutuante */
   @media (max-width: 768px) {
     .show-navigator-btn {
-      width: 45px;
-      height: 45px;
-      font-size: 18px;
+      width: 50px;
+      height: 50px;
+      font-size: 22px;
       bottom: 15px;
     }
   }
 
   @media (max-width: 480px) {
     .show-navigator-btn {
-      width: 40px;
-      height: 40px;
-      font-size: 16px;
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
       bottom: 10px;
     }
   }

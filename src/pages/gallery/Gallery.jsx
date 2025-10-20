@@ -3,9 +3,10 @@ import './Gallery.css';
 import { useImages } from '../../hooks/useImages';
 import { ImageUpload } from '../../components/ImageUpload/ImageUpload';
 import Modal from '../../components/Modal/Modal';
+import { FaTrash } from 'react-icons/fa';
 
 export default function Gallery() {
-    const { images, addImage, loading, error } = useImages();
+    const { images, addImage, removeImage, loading, error } = useImages();
     const [dragActive, setDragActive] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -52,6 +53,17 @@ export default function Gallery() {
         setSelectedImage(null);
     };
 
+    const handleDeleteImage = async () => {
+        if (selectedImage) {
+            try {
+                await removeImage(selectedImage.id);
+                setSelectedImage(null);
+            } catch (err) {
+                console.error('Erro ao deletar imagem:', err);
+            }
+        }
+    };
+
 
     return (
         <div 
@@ -63,7 +75,14 @@ export default function Gallery() {
         >
           
 
-            {images.length > 0 ? (
+            {loading && images.length === 0 ? (
+                <div className="loading-gallery">
+                    <div className="loading-spinner">
+                        <div className="spinner"></div>
+                        <p>Carregando imagens...</p>
+                    </div>
+                </div>
+            ) : images.length > 0 ? (
                 <div className="image-grid">
                     {images.map((imageData) => (
                         <div key={imageData.id} className="image-item">
@@ -108,6 +127,13 @@ export default function Gallery() {
             {selectedImage && (
                 <div className="image-modal-overlay" onClick={handleCloseModal}>
                     <div className="image-modal-container" onClick={(e) => e.stopPropagation()}>
+                        <button 
+                            className="delete-image-btn"
+                            onClick={handleDeleteImage}
+                            title="Excluir imagem"
+                        >
+                            <FaTrash />
+                        </button>
                         <img 
                             src={selectedImage.url} 
                             alt={selectedImage.originalName}

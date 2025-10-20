@@ -1,7 +1,7 @@
 {
   "name": "meu-app",
   "private": true,
-  "version": "1.0.5",
+  "version": "1.0.6",
   "type": "module",
   "main": "main.cjs",
   "scripts": {
@@ -56,7 +56,8 @@
         "provider": "github",
         "owner": "danielmunier",
         "repo": "app",
-        "private": false
+        "private": false,
+        "releaseType": "release"
       }
     ],
     "nsis": {

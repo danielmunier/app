@@ -1,18 +1,21 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme";
+import { useNotifications } from "../../hooks/useNotifications";
 import {  GiHouse, GiMoon, GiPaintBrush, GiPhotoCamera, GiSun } from "react-icons/gi";
-import { BsPin, BsPinFill, BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { BsPin, BsPinFill, BsChevronDown, BsChevronUp, BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { useState } from "react";
 import "./Navigator.css";
-import { BiChat } from "react-icons/bi";
+import { BiChat, BiBell, BiTrash } from "react-icons/bi";
 import { FaTasks } from "react-icons/fa";
 
-export default function Navigator() {
+export default function Navigator({ orientation = "horizontal", position = "bottom" }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { isDarkMode, toggleTheme } = useTheme();
+  const { notifications, unreadCount, removeNotification } = useNotifications();
   const [isPinned, setIsPinned] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handlePin = async () => {
     try {
@@ -25,6 +28,16 @@ export default function Navigator() {
 
   const toggleHidden = () => {
     setIsHidden(!isHidden);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
+  const handleRemoveNotification = (index) => {
+    if (notifications[index]) {
+      removeNotification(notifications[index].id);
+    }
   };
 
   const navItems = [
@@ -41,14 +54,17 @@ export default function Navigator() {
       {isHidden && (
         <button
           onClick={toggleHidden}
-          className="show-navigator-btn"
+          className={`show-navigator-btn ${orientation === "vertical" ? `vertical-${position}` : ""}`}
           title="Mostrar navegador"
         >
-          <BsChevronUp />
+          {orientation === "vertical" ? 
+            (position === "right" ? <BsChevronLeft /> : <BsChevronRight />) : 
+            <BsChevronUp />
+          }
         </button>
       )}
 
-      <div className={`cute-nav ${isDarkMode ? "dark" : "light"} ${isHidden ? "hidden" : ""}`}>
+      <div className={`cute-nav ${isDarkMode ? "dark" : "light"} ${isHidden ? "hidden" : ""} ${orientation === "vertical" ? "vertical" : "horizontal"} ${position}`}>
         {navItems.map((item) => (
           <button
             key={item.path}
@@ -85,6 +101,22 @@ export default function Navigator() {
         </button>
 
         <button
+          onClick={toggleNotifications}
+          className="cute-nav-btn notification-toggle"
+          title="Notificações"
+        >
+          <div className="cute-nav-icon">
+            <BiBell />
+            {unreadCount > 0 && (
+              <span className="notification-badge">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </div>
+          <div className="cute-nav-label"></div>
+        </button>
+
+        <button
           onClick={toggleHidden}
           className="cute-nav-btn hide-toggle"
           title={isHidden ? "Mostrar navegador" : "Esconder navegador"}
@@ -95,6 +127,43 @@ export default function Navigator() {
           <div className="cute-nav-label"></div>
         </button>
       </div>
+
+      {/* Painel de notificações */}
+      {showNotifications && (
+        <div className="notification-panel">
+          {notifications.length === 0 ? (
+            <div className="notification-empty">
+              Sem novas notificações
+            </div>
+          ) : (
+            notifications.map((n, i) => (
+              <div key={n.id || i} className="notification-item">
+                <div className="notification-content">
+                  <span className="notification-title">{n.title}</span>
+                  {n.message && (
+                    <span className="notification-message">{n.message}</span>
+                  )}
+                  <span className="notification-time">
+                    {n.time ? new Date(n.time).toLocaleString('pt-BR', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      day: '2-digit',
+                      month: '2-digit'
+                    }) : 'Agora'}
+                  </span>
+                </div>
+                <button
+                  className="notification-delete-btn"
+                  title="Remover notificação"
+                  onClick={() => handleRemoveNotification(i)}
+                >
+                  <BiTrash />
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </>
   );
 }

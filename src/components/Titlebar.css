@@ -1,0 +1,61 @@
+.titlebar {
+    width: 100%;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--titlebar-fg, #fff);
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-app-region: drag;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  
+  .titlebar-left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .titlebar-title {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .titlebar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    -webkit-app-region: no-drag;
+  }
+  
+  
+  
+
+  /* Botões */
+  .titlebar-btn {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-width: 32px;
+  }
+  
+  .titlebar-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+  
+  .titlebar-btn.close:hover {
+    background: red;
+    color: white;
+  }
+  

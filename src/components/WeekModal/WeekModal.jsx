@@ -240,23 +240,27 @@ export default function WeekModal({
           </div>
 
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={handleClose}>
-              Cancelar
-            </button>
-            {isEditing && (
-              <button 
-                type="button" 
-                className="delete-btn" 
-                onClick={handleDeleteClick}
-                title="Excluir semana"
-              >
-                <FaTrash />
-                Excluir
+            <div className="left-actions">
+              {isEditing && (
+                <button 
+                  type="button" 
+                  className="delete-btn" 
+                  onClick={handleDeleteClick}
+                  title="Excluir semana"
+                >
+                  <FaTrash />
+                  Excluir
+                </button>
+              )}
+            </div>
+            <div className="right-actions">
+              <button type="button" className="cancel-btn" onClick={handleClose}>
+                Cancelar
               </button>
-            )}
-            <button type="submit" className="save-btn">
-              {isEditing ? 'Salvar Alterações' : 'Criar Semana'}
-            </button>
+              <button type="submit" className="save-btn">
+                {isEditing ? 'Salvar Alterações' : 'Criar Semana'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

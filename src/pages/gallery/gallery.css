@@ -196,6 +196,38 @@
     color: #333;
 }
 
+.loading-gallery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    padding: 60px 20px;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.loading-spinner .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-spinner p {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+}
+
 /* Estilos para o modal de imagem simplificado */
 .image-modal-overlay {
     position: fixed;
@@ -221,6 +253,27 @@
     align-items: center;
     justify-content: center;
     cursor: default;
+}
+
+.delete-image-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: #666;
+    border: none;
+    border-radius: 50%;
+ 
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.delete-image-btn:hover {
+    color: #333;
 }
 
 

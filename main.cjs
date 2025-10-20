@@ -38,7 +38,7 @@ function createWindow() {
 
   if (!app.isPackaged) {
     win.loadURL('http://localhost:5173');
-   //win.webContents.openDevTools();
+   win.webContents.openDevTools();
   } else {
     // Usar loadURL com file:// para melhor compatibilidade com roteamento
     const indexPath = path.join(__dirname, 'dist/index.html');

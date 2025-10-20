@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import Background from "./components/Background/Background";
 import { useTheme } from "./hooks/useTheme";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -16,6 +16,12 @@ import WeekKanban from "./pages/tasks/WeekKanban";
 
 function AppContent() {
   const { isDarkMode } = useTheme();
+  const location = useLocation();
+
+  // Determinar orientação e posição do Navigator baseado na rota
+  const isVertical = location.pathname === "/chat";
+  const orientation = isVertical ? "vertical" : "horizontal";
+  const position = isVertical ? "right" : "bottom";
 
   return (
     <div
@@ -28,8 +34,8 @@ function AppContent() {
         transition: "color 0.5s ease",
       }}
     >
-      <TitleBar />
-      <Navigator />
+    <TitleBar />
+      <Navigator orientation={orientation} position={position} />
       <Background />
 
       <main

@@ -1,82 +1,45 @@
+import "./TitleBar.css";
 
 export default function TitleBar() {
 
-  const handleMinimize = () => {
-    window.electronAPI.windowControl.minimize();
-  };
-
-  const handleMaximize = () => {
-    window.electronAPI.windowControl.maximize();
-  };
-
-  const handleClose = () => {
-    window.electronAPI.windowControl.close();
+  const handleWindowControl = (action) => {
+    if (window.electronAPI?.windowControl) {
+      window.electronAPI.windowControl[action]();
+    } else {
+      console.warn(`Ação ${action} não disponível no ambiente web`);
+    }
   };
 
 
   return (
-    <div
-      style={{
-        height: "50px",
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        padding: "10px",
-        WebkitAppRegion: "drag",
-        position: "relative",
-        zIndex: 20,
-      }}
-    >
-      {/* Controles de janela - lado esquerdo */}
-      <div style={{ display: "flex", gap: "8px" }}>
+    <div className="titlebar">
+      <div className="titlebar-left">
+        {/* Espaço vazio - notificações movidas para o Navigator */}
+      </div>
+
+      <div className="titlebar-right">
         <button
-          onClick={handleClose}
-          style={{ ...buttonStyle, color: "#ff5555" }}
-          title="Fechar"
+          className="titlebar-btn"
+          title="Minimizar"
+          onClick={() => handleWindowControl("minimize")}
         >
-          ×
+          &#x2013;
         </button>
-        <button onClick={handleMaximize} style={buttonStyle} title="Maximizar">
-          □
+        <button
+          className="titlebar-btn"
+          title="Maximizar"
+          onClick={() => handleWindowControl("maximize")}
+        >
+          ☐
         </button>
-        <button onClick={handleMinimize} style={buttonStyle} title="Minimizar">
-          –
+        <button
+          className="titlebar-btn close"
+          title="Fechar"
+          onClick={() => handleWindowControl("close")}
+        >
+          ✕
         </button>
       </div>
-      
-      {/* Controles de aplicação - lado direito */}
-      {/* <div style={{ display: "flex", gap: "8px", marginLeft: "auto", marginRight: "10px" }}>
-        <button 
-          onClick={handlePin} 
-          style={{ 
-            ...buttonStyle, 
-            color: isPinned ? "#4CAF50" : "white" 
-          }} 
-          title={isPinned ? "Desafixar" : "Fixar"}
-        >
-          <BsPin />
-        </button>
-        <button onClick={handleTheme} style={buttonStyle} title="Tema">
-          {isDarkMode ? <BsMoonFill /> : <BsSunFill />}
-        </button>
-      </div> */}
     </div>
   );
 }
-const buttonStyle = {
-  width: "28px",
-  background: "transparent",
-  border: "none",
-  color: "white",
-  fontSize: "18px",
-  cursor: "pointer",
-  WebkitAppRegion: "no-drag",
-  outline: "none",
-  "&:focus": {
-    outline: "none",
-  },
-  "&:active": {
-    outline: "none",
-  },
-};
-

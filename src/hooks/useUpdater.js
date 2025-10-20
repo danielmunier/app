@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 export const useUpdater = () => {
   const [version, setVersion] = useState("");
@@ -6,6 +6,9 @@ export const useUpdater = () => {
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [newVersion, setNewVersion] = useState("");
+  const [isDownloading, setIsDownloading] = useState(false);
+  const checkIntervalRef = useRef(null);
+  const hasInitializedRef = useRef(false);
 
   const cleanupListeners = useCallback(() => {
     if (window.electronAPI) {
@@ -48,6 +51,7 @@ export const useUpdater = () => {
         setUpdateStatus(`🟡 Nova atualização disponível! (v${newVer}) Baixando...`);
         setUpdateAvailable(true);
         setIsCheckingUpdate(false);
+        setIsDownloading(true);
       });
 
     window.electronAPI.onUpdateDownloaded((info) => {
@@ -56,6 +60,7 @@ export const useUpdater = () => {
       setUpdateStatus("🟢 Atualização baixada! O app será reiniciado...");
       setUpdateAvailable(true);
       setIsCheckingUpdate(false);
+      setIsDownloading(false);
     });
 
     window.electronAPI.onUpdateNotAvailable((info) => {
@@ -64,6 +69,7 @@ export const useUpdater = () => {
       setUpdateStatus("✅ Você está usando a versão mais recente!");
       setUpdateAvailable(false);
       setIsCheckingUpdate(false);
+      setIsDownloading(false);
     });
 
     window.electronAPI.onUpdateError((error) => {
@@ -90,6 +96,7 @@ export const useUpdater = () => {
       setUpdateStatus(`❌ Erro: ${errorMessage}`);
       setUpdateAvailable(false);
       setIsCheckingUpdate(false);
+      setIsDownloading(false);
     });
 
     return () => {
@@ -104,23 +111,41 @@ export const useUpdater = () => {
     }
   }, [isCheckingUpdate]);
 
+
   useEffect(() => {
-    if (window.electronAPI) {
+    if (window.electronAPI && !hasInitializedRef.current) {
+      hasInitializedRef.current = true;
+      
       window.electronAPI.getAppVersion().then((v) => setVersion(v));
       
       const cleanup = setupListeners();
       
+      // Verificar imediatamente
+      console.log('🔍 Verificação inicial de atualizações');
       window.electronAPI.checkForUpdates();
+      
+      // Configurar verificação periódica a cada 15 minutos
+      console.log('🔄 Iniciando verificação periódica de atualizações (a cada 15 minutos)');
+      checkIntervalRef.current = setInterval(() => {
+        console.log('🔄 Verificação periódica de atualizações');
+        window.electronAPI.checkForUpdates();
+      }, 15 * 60 * 1000); // 15 minutos
 
       return () => {
         if (cleanup) cleanup();
         cleanupListeners();
+        if (checkIntervalRef.current) {
+          console.log('⏹️ Parando verificação periódica de atualizações');
+          clearInterval(checkIntervalRef.current);
+          checkIntervalRef.current = null;
+        }
       };
-    } else {
+    } else if (!window.electronAPI) {
       setVersion("Web Version");
       setUpdateStatus("🌐 Modo Web - Atualizações automáticas não disponíveis");
     }
-  }, []); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Executa apenas uma vez 
 
   const downloadUpdate = useCallback(() => {
     if (window.electronAPI && updateAvailable) {
@@ -135,6 +160,7 @@ export const useUpdater = () => {
     isCheckingUpdate,
     updateAvailable,
     newVersion,
+    isDownloading,
     checkForUpdates,
     downloadUpdate
   };
