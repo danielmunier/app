@@ -1,10 +1,8 @@
-.image-upload {
-    /* Remover margem para integrar com a grid */
-}
+
 
 .upload-area {
     aspect-ratio: 1;
-    border: 2px dashed #ccc;
+    border: 2px dashed #ffffff;
     border-radius: 12px;
     padding: 20px;
     text-align: center;
@@ -12,7 +10,6 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    background-color: #f8f9fa;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,7 +20,6 @@
 
 .upload-area:hover {
     border-color: #007bff;
-    background-color: #f0f8ff;
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
@@ -79,6 +75,7 @@
     justify-content: center;
     height: 100%;
 }
+
 
 .spinner {
     width: 32px;

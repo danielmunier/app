@@ -79,7 +79,7 @@ export function ImageUpload({ onImageAdd, loading, error }) {
                     ) : (
                         <>
                             <p className="upload-text">
-                                + Adicionar imagem
+                                
                             </p>
                           
                         </>
