@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Background from "./components/Background/Background";
 import { useTheme } from "./hooks/useTheme";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -61,9 +61,9 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      <HashRouter>
         <AppContent />
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   );
 }

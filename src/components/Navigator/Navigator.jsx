@@ -29,10 +29,10 @@ export default function Navigator() {
 
   const navItems = [
     { path: "/", label: "", icon: <GiHouse /> },
-    { path: "/Gallery", label: "", icon: <GiPhotoCamera /> },
+    { path: "/gallery", label: "", icon: <GiPhotoCamera /> },
     { path: "/tasks", label: "", icon: <FaTasks /> },
-    { path: "/Chat", label: "", icon: <BiChat /> },
-    { path: "/Draw", label: "", icon: <GiPaintBrush /> },
+    { path: "/chat", label: "", icon: <BiChat /> },
+    { path: "/draw", label: "", icon: <GiPaintBrush /> },
   ];
 
   return (
