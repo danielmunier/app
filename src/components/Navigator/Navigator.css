@@ -1,0 +1,334 @@
+/* 🎀 Container principal */
+.cute-nav {
+    display: flex;
+    gap: 14px;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 16px;
+    padding: 10px 16px;
+    z-index: 15;
+    backdrop-filter: blur(6px);
+    background: var(--nav-bg);
+    box-shadow: var(--nav-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    WebkitAppRegion: no-drag;
+    max-width: calc(100vw - 40px);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  /* Esconder o navigator */
+  .cute-nav.hidden {
+    transform: translateX(-50%) translateY(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Esconder scrollbar */
+  .cute-nav::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* 🌼 Botão */
+  .cute-nav-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    background: var(--nav-btn-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--nav-btn-shadow);
+    transition: all 0.25s ease;
+  }
+  
+  /* Hover */
+  .cute-nav-btn:hover {
+    transform: translateY(-1px);
+    border: none;
+  }
+  .cute-nav-btn:focus {
+    outline: none;
+  }
+
+  /* Ativo */
+  .cute-nav-btn.active {
+    background: var(--nav-btn-active-bg);
+
+  }
+  
+  /* 🌈 Ícone */
+  .cute-nav-icon {
+    font-size: 32px;
+    margin-bottom: 0px;
+    color: var(--nav-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    /* Efeito pixel art */
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    /* Adiciona um pouco de "chunkiness" */
+    filter: contrast(1.1) saturate(1.1);
+  }
+  
+  /* 🌸 Texto */
+  .cute-nav-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--nav-text);
+  }
+
+  /* Botão de esconder/mostrar */
+  .cute-nav-btn.hide-toggle {
+    background: var(--nav-btn-bg);
+    border: 2px solid var(--nav-text);
+    opacity: 0.8;
+  }
+
+  .cute-nav-btn.hide-toggle:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    background: var(--nav-btn-active-bg);
+  }
+
+  .cute-nav-btn.hide-toggle .cute-nav-icon {
+    font-size: 20px;
+  }
+
+  /* 📱 Media Queries para Responsividade */
+
+  /* Tablets grandes e desktops pequenos */
+  @media (max-width: 1024px) {
+    .cute-nav {
+      gap: 12px;
+      padding: 8px 14px;
+      bottom: 25px;
+    }
+    
+    .cute-nav-btn {
+      width: 65px;
+      height: 65px;
+    }
+    
+    .cute-nav-icon {
+      font-size: 28px;
+    }
+  }
+
+  /* Tablets */
+  @media (max-width: 768px) {
+    .cute-nav {
+      gap: 10px;
+      padding: 6px 12px;
+      bottom: 20px;
+      max-width: calc(100vw - 20px);
+    }
+    
+    .cute-nav-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+    }
+    
+    .cute-nav-icon {
+      font-size: 24px;
+    }
+    
+    .cute-nav-label {
+      font-size: 10px;
+    }
+  }
+
+  /* Smartphones grandes */
+  @media (max-width: 480px) {
+    .cute-nav {
+      gap: 8px;
+      padding: 5px 10px;
+      bottom: 15px;
+      max-width: calc(100vw - 10px);
+      border-radius: 12px;
+    }
+    
+    .cute-nav-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      min-width: 50px;
+      flex-shrink: 0;
+    }
+    
+    .cute-nav-icon {
+      font-size: 20px;
+    }
+    
+    .cute-nav-label {
+      font-size: 9px;
+    }
+  }
+
+  /* Smartphones pequenos */
+  @media (max-width: 360px) {
+    .cute-nav {
+      gap: 6px;
+      padding: 4px 8px;
+      bottom: 10px;
+      max-width: calc(100vw - 5px);
+    }
+    
+    .cute-nav-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 6px;
+      min-width: 45px;
+    }
+    
+    .cute-nav-icon {
+      font-size: 18px;
+    }
+    
+    .cute-nav-label {
+      font-size: 8px;
+    }
+  }
+
+  /* Landscape em dispositivos móveis */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .cute-nav {
+      bottom: 10px;
+      padding: 4px 8px;
+      gap: 6px;
+    }
+    
+    .cute-nav-btn {
+      width: 45px;
+      height: 45px;
+      min-width: 45px;
+    }
+    
+    .cute-nav-icon {
+      font-size: 18px;
+    }
+    
+    .cute-nav-label {
+      font-size: 8px;
+    }
+  }
+
+  /* Melhorias para telas muito pequenas */
+  @media (max-width: 320px) {
+    .cute-nav {
+      gap: 4px;
+      padding: 3px 6px;
+      bottom: 8px;
+      max-width: calc(100vw - 2px);
+    }
+    
+    .cute-nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      min-width: 40px;
+    }
+    
+    .cute-nav-icon {
+      font-size: 16px;
+    }
+    
+    .cute-nav-label {
+      font-size: 7px;
+    }
+  }
+
+  /* Melhorias para hover em dispositivos touch */
+  @media (hover: none) and (pointer: coarse) {
+    .cute-nav-btn:hover {
+      transform: none;
+    }
+    
+    .cute-nav-btn:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+  }
+
+  /* Ajustes para telas de alta resolução */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .cute-nav {
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  /* Botão flutuante para mostrar o Navigator */
+  .show-navigator-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--nav-bg);
+    backdrop-filter: blur(6px);
+    border: 2px solid var(--nav-text);
+    box-shadow: var(--nav-shadow);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--nav-text);
+    font-size: 20px;
+    animation: pulse 2s infinite;
+  }
+
+  .show-navigator-btn:hover {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    background: var(--nav-btn-active-bg);
+  }
+
+  .show-navigator-btn:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+  }
+
+  /* Responsividade para o botão flutuante */
+  @media (max-width: 768px) {
+    .show-navigator-btn {
+      width: 45px;
+      height: 45px;
+      font-size: 18px;
+      bottom: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .show-navigator-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      bottom: 10px;
+    }
+  }
+  

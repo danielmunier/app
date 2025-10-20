@@ -3,7 +3,7 @@
   height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Remove scroll do root */
+  overflow: hidden; 
 }
 
 .logo {
@@ -43,12 +43,10 @@
 }
 
 .main-app {
-  /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-/* Webkit (Chrome, Safari, Edge) */
 .main-app::-webkit-scrollbar {
   width: 6px;
 }
@@ -80,7 +78,6 @@
   opacity: 1;
 }
 
-/* Animação para o spinner de loading */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

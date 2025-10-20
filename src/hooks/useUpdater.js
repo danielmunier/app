@@ -7,7 +7,6 @@ export const useUpdater = () => {
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [newVersion, setNewVersion] = useState("");
 
-  // Função para limpar listeners
   const cleanupListeners = useCallback(() => {
     if (window.electronAPI) {
       // Remover todos os listeners existentes
@@ -19,7 +18,6 @@ export const useUpdater = () => {
     }
   }, []);
 
-  // Função para configurar listeners
   const setupListeners = useCallback(() => {
     if (!window.electronAPI) return;
 
@@ -31,10 +29,9 @@ export const useUpdater = () => {
         if (!updateAvailable) {
           setUpdateStatus("⏰ Timeout - Verificação demorou muito. Tente novamente.");
         }
-      }, 15000); // 15 segundos
+      }, 10000); 
     };
 
-    // Event listeners para atualizações
     window.electronAPI.onCheckingForUpdate(() => {
       console.log('🔍 Verificando atualizações...');
       setIsCheckingUpdate(true);
@@ -80,7 +77,6 @@ export const useUpdater = () => {
         errorMessage = error.message || error.toString();
       }
       
-      // Tratar erros específicos
       if (errorMessage.includes('ENOENT')) {
         errorMessage = 'Arquivo de configuração não encontrado';
       } else if (errorMessage.includes('network')) {
@@ -101,7 +97,6 @@ export const useUpdater = () => {
     };
   }, [updateAvailable]);
 
-  // Função para verificar atualizações
   const checkForUpdates = useCallback(() => {
     if (window.electronAPI && !isCheckingUpdate) {
       console.log('🔍 Verificação manual iniciada');
@@ -109,16 +104,12 @@ export const useUpdater = () => {
     }
   }, [isCheckingUpdate]);
 
-  // Inicialização
   useEffect(() => {
     if (window.electronAPI) {
-      // Obter versão atual
       window.electronAPI.getAppVersion().then((v) => setVersion(v));
       
-      // Configurar listeners
       const cleanup = setupListeners();
       
-      // Verificar atualizações automaticamente apenas uma vez
       window.electronAPI.checkForUpdates();
 
       return () => {
@@ -129,9 +120,8 @@ export const useUpdater = () => {
       setVersion("Web Version");
       setUpdateStatus("🌐 Modo Web - Atualizações automáticas não disponíveis");
     }
-  }, []); // Remover dependências para evitar re-execução
+  }, []); 
 
-  // Função para iniciar download manual
   const downloadUpdate = useCallback(() => {
     if (window.electronAPI && updateAvailable) {
       console.log('🔄 Iniciando download manual...');

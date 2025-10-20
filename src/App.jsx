@@ -1,10 +1,21 @@
-import './App.css'
-import StarryBackground from './components/Background'
-import TitleBar from './components/TitleBar'
-import { useUpdater } from './hooks/useUpdater'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Background from "./components/Background/Background";
+import { useTheme } from "./hooks/useTheme";
+import { ThemeProvider } from "./context/ThemeContext";
+import TitleBar from "./components/TitleBar";
+import Navigator from "./components/Navigator/Navigator";
 
-function App() {
-  const { version, updateStatus, isCheckingUpdate, updateAvailable, newVersion, checkForUpdates, downloadUpdate } = useUpdater();
+// importe suas páginas
+import Home from "./pages/home/Home";
+import Test from "./pages/Test";
+import Chat from "./pages/chat/Chat";
+import Draw from "./pages/draw/draw";
+import Gallery from "./pages/gallery/Gallery";
+import Tasks from "./pages/tasks/Tasks";
+import WeekKanban from "./pages/tasks/WeekKanban";
+
+function AppContent() {
+  const { isDarkMode } = useTheme();
 
   return (
     <div
@@ -13,128 +24,46 @@ function App() {
         height: "100vh",
         position: "relative",
         overflow: "hidden",
+        color: isDarkMode ? "white" : "black",
+        transition: "color 0.5s ease",
       }}
     >
-      <StarryBackground />
       <TitleBar />
+      <Navigator />
+      <Background />
 
       <main
-        className="main-app"
         style={{
           position: "absolute",
-          top: "30px",
+          top: "50px",
           left: 0,
           right: 0,
+          padding: "10px",
           bottom: 0,
           zIndex: 10,
-          color: "white",
-          textAlign: "center",
-          padding: "20px",
-          overflowY: "auto",
+          overflow: "auto",
         }}
       >
-        <div
-          style={{
-            backgroundColor: updateAvailable ? "#2a4a2a" : "#2a2a2a",
-            border: `1px solid ${updateAvailable ? "#4a7c4a" : "#555"}`,
-            padding: "15px 25px",
-            borderRadius: 8,
-            display: "inline-block",
-            marginBottom: 20,
-            minWidth: "300px",
-            textAlign: "center",
-            boxShadow: updateAvailable ? "0 0 10px rgba(74, 124, 74, 0.3)" : "none",
-          }}
-        >
-          {isCheckingUpdate && (
-            <div style={{ marginBottom: 10 }}>
-              <div
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  border: "2px solid #555",
-                  borderTop: "2px solid #646cff",
-                  borderRadius: "50%",
-                  animation: "spin 1s linear infinite",
-                  display: "inline-block",
-                  marginRight: "10px",
-                }}
-              />
-              Verificando atualizações...
-            </div>
-          )}
-          
-          {updateStatus && (
-            <div style={{ fontSize: "14px", lineHeight: "1.4" }}>
-              {updateStatus}
-            </div>
-          )}
-
-          {updateAvailable && (
-            <div style={{ marginTop: 10, fontSize: "12px", opacity: 0.8 }}>
-              <div>📦 Nova versão disponível: <strong>v{newVersion}</strong></div>
-              <div>📥 Uma janela de confirmação aparecerá quando a atualização estiver pronta</div>
-            </div>
-          )}
-        </div>
-
-        <section>
-          <h2>🔄 Sistema de Atualizações</h2>
-          <p>O app verifica automaticamente por atualizações ao iniciar.</p>
-          
-          {window.electronAPI && (
-            <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
-              <button
-                onClick={checkForUpdates}
-                disabled={isCheckingUpdate}
-                style={{
-                  backgroundColor: isCheckingUpdate ? "#555" : "#646cff",
-                  color: "white",
-                  border: "none",
-                  padding: "10px 20px",
-                  borderRadius: "6px",
-                  cursor: isCheckingUpdate ? "not-allowed" : "pointer",
-                  fontSize: "14px",
-                  opacity: isCheckingUpdate ? 0.6 : 1,
-                }}
-              >
-                {isCheckingUpdate ? "🔄 Verificando..." : "🔍 Verificar Atualizações"}
-              </button>
-              
-              {updateAvailable && (
-                <button
-                  onClick={downloadUpdate}
-                  style={{
-                    backgroundColor: "#4caf50",
-                    color: "white",
-                    border: "none",
-                    padding: "10px 20px",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "14px",
-                  }}
-                >
-                  ⬇️ Baixar Atualização
-                </button>
-              )}
-            </div>
-          )}
-        </section>
-
-        <div
-          style={{
-            position: "fixed",
-            bottom: 10,
-            right: 10,
-            color: "#888",
-            fontSize: 12,
-          }}
-        >
-          v{version}
-        </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/draw" element={<Draw />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/tasks/week/:weekId" element={<WeekKanban />} />
+        </Routes>
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+}

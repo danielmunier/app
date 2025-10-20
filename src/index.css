@@ -27,7 +27,50 @@ body {
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
-  overflow: hidden; /* Remove scroll global */
+  overflow: hidden; 
+}
+
+/* Scroll personalizado - simples e minimalista */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(234, 175, 241, 0.3);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 175, 241, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(234, 175, 241, 0.3) transparent;
+}
+
+/* Scroll no modo dark - cor do titlebar */
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(31, 31, 31, 0.6);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(31, 31, 31, 0.8);
+}
+
+[data-theme="dark"] * {
+  scrollbar-color: rgba(31, 31, 31, 0.6) transparent;
 }
 
 h1 {
@@ -67,3 +110,22 @@ button:focus-visible {
   }
 }
 
+:root {
+  --nav-bg: rgba(255, 255, 255, 0.7);
+  --nav-border: #eaaff1;
+  --nav-text: #a89bd1;
+  --nav-shadow: 0 3px 8px rgba(255, 180, 200, 0.3);
+  --nav-btn-bg: #fff;
+  --nav-btn-hover-bg: #fff8f9;
+  --nav-btn-active-bg: linear-gradient(180deg, #fff8e8 0%, #ffe9f0 100%);
+  --nav-btn-shadow: 0 2px 5px rgba(255, 200, 210, 0.3);
+}
+
+[data-theme="dark"] {
+  --nav-bg: rgba(30, 30, 30, 0.8);
+  --nav-border: #555;
+  --nav-text: #eaaff1;
+  --nav-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  --nav-btn-bg: #2b2b2b;
+  --nav-btn-active-bg: linear-gradient(180deg, #2e2e2e 0%, #3b3b3b 100%);
+}

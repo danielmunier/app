@@ -1,4 +1,6 @@
+
 export default function TitleBar() {
+
   const handleMinimize = () => {
     window.electronAPI.windowControl.minimize();
   };
@@ -11,29 +13,22 @@ export default function TitleBar() {
     window.electronAPI.windowControl.close();
   };
 
+
   return (
     <div
       style={{
-        height: "30px",
+        height: "50px",
         width: "100%",
         display: "flex",
-        justifyContent: "flex-end",
         alignItems: "center",
-        background: "rgba(0,0,0,0.3)",
+        padding: "10px",
         WebkitAppRegion: "drag",
-        position: "fixed",
-        top: 0,
-        left: 0,
+        position: "relative",
         zIndex: 20,
       }}
     >
-      <div style={{ display: "flex", gap: "8px", marginRight: "10px" }}>
-        <button onClick={handleMinimize} style={buttonStyle} title="Minimizar">
-          –
-        </button>
-        <button onClick={handleMaximize} style={buttonStyle} title="Maximizar">
-          □
-        </button>
+      {/* Controles de janela - lado esquerdo */}
+      <div style={{ display: "flex", gap: "8px" }}>
         <button
           onClick={handleClose}
           style={{ ...buttonStyle, color: "#ff5555" }}
@@ -41,18 +36,47 @@ export default function TitleBar() {
         >
           ×
         </button>
+        <button onClick={handleMaximize} style={buttonStyle} title="Maximizar">
+          □
+        </button>
+        <button onClick={handleMinimize} style={buttonStyle} title="Minimizar">
+          –
+        </button>
       </div>
+      
+      {/* Controles de aplicação - lado direito */}
+      {/* <div style={{ display: "flex", gap: "8px", marginLeft: "auto", marginRight: "10px" }}>
+        <button 
+          onClick={handlePin} 
+          style={{ 
+            ...buttonStyle, 
+            color: isPinned ? "#4CAF50" : "white" 
+          }} 
+          title={isPinned ? "Desafixar" : "Fixar"}
+        >
+          <BsPin />
+        </button>
+        <button onClick={handleTheme} style={buttonStyle} title="Tema">
+          {isDarkMode ? <BsMoonFill /> : <BsSunFill />}
+        </button>
+      </div> */}
     </div>
   );
 }
-
 const buttonStyle = {
   width: "28px",
-  height: "28px",
   background: "transparent",
   border: "none",
   color: "white",
-  fontSize: "16px",
+  fontSize: "18px",
   cursor: "pointer",
   WebkitAppRegion: "no-drag",
+  outline: "none",
+  "&:focus": {
+    outline: "none",
+  },
+  "&:active": {
+    outline: "none",
+  },
 };
+

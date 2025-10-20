@@ -1,0 +1,109 @@
+.image-upload {
+    /* Remover margem para integrar com a grid */
+}
+
+.upload-area {
+    aspect-ratio: 1;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.upload-area:hover {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.upload-area.drag-active {
+    border-color: #007bff;
+    background-color: #e6f3ff;
+    transform: scale(1.02);
+}
+
+.upload-area.loading {
+    cursor: not-allowed;
+    opacity: 0.7;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.upload-content {
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.upload-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+}
+
+.upload-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+}
+
+.upload-hint {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.upload-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.upload-error {
+    margin-top: 8px;
+    padding: 8px;
+    background-color: #fee;
+    border: 1px solid #fcc;
+    border-radius: 6px;
+    color: #c33;
+    text-align: center;
+}
+
+.upload-error p {
+    margin: 0;
+    font-size: 12px;
+}

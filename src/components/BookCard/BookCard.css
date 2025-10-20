@@ -1,0 +1,215 @@
+.cute-card {
+  width: 140px;
+  height: 200px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 8px 20px 20px 8px;
+  border: 2px solid #eaaff1;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.05),
+    0 2px 4px rgba(255, 160, 180, 0.2);
+  font-family: "Comic Sans MS", "Baloo 2", cursive;
+  overflow: visible;
+  background: white;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, width 0.3s ease, height 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .cute-card {
+    width: 160px;
+    height: 230px;
+    border-radius: 9px 22px 22px 9px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cute-card {
+    width: 180px;
+    height: 260px;
+    border-radius: 10px 24px 24px 10px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .cute-card {
+    width: 200px;
+    height: 280px;
+    border-radius: 12px 28px 28px 12px;
+  }
+}
+
+.cute-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.15),
+    0 16px 32px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(255, 160, 180, 0.3);
+}
+
+.cute-footer {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  height: 20%;
+  transform: translateX(-50%);
+  width: 90%;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(4px);
+  border: 2px dashed #eaaff1;
+  border-radius: 5px;
+  padding: 8px;
+  display: flex; 
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--nav-text);
+  box-shadow: 0 3px 8px rgba(255, 170, 190, 0.5);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .cute-footer {
+    bottom: 10px;
+    height: 19%;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    box-shadow: 0 3px 10px rgba(255, 170, 190, 0.5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cute-footer {
+    bottom: 12px;
+    height: 18%;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(255, 170, 190, 0.5);
+  }
+}
+
+@media (min-width: 1440px) {
+  .cute-footer {
+    bottom: 14px;
+    height: 17%;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 16px;
+    box-shadow: 0 5px 14px rgba(255, 170, 190, 0.5);
+  }
+}
+
+.cute-info {
+  flex: 1;
+  color: var(--nav-text);
+}
+
+.cute-title {
+  margin: 0;
+  font-weight: bold;
+  color: var(--nav-text);
+  font-size: inherit;
+}
+
+.cute-note {
+  margin: 0;
+  font-size: 0.85em;
+  color: var(--nav-text);
+  opacity: 0.8;
+}
+
+.cute-icon {
+  font-size: 1.1em;
+}
+
+.cute-edit-btn {
+  background: none;
+  color: var(--nav-text);
+  border: none;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+  opacity: 0.7;
+  padding: 4px;
+}
+
+.cute-edit-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  color: var(--nav-text);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.cute-edit-btn:active {
+  transform: scale(0.95);
+}
+
+@media (min-width: 768px) {
+  .cute-note {
+    font-size: 0.9em;
+  }
+  .cute-icon {
+    font-size: 1.15em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cute-note {
+    font-size: 0.85em;
+  }
+  .cute-icon {
+    font-size: 1.1em;
+  }
+}
+
+@media (min-width: 1440px) {
+  .cute-note {
+    font-size: 0.8em;
+  }
+  .cute-icon {
+    font-size: 1.05em;
+  }
+}
+
+.cute-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: 
+    radial-gradient(
+      circle at top left,
+      rgba(255, 200, 210, 0.2),
+      transparent 70%
+    ),
+    /* Efeito de noise/pixelização */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 1px,
+      rgba(0, 0, 0, 0.02) 1px,
+      rgba(0, 0, 0, 0.02) 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 1px,
+      rgba(255, 255, 255, 0.03) 1px,
+      rgba(255, 255, 255, 0.03) 2px
+    );
+  z-index: 0;
+  pointer-events: none;
+}
