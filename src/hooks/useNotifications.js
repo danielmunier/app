@@ -12,6 +12,9 @@ const generateId = () => Date.now().toString(36) + Math.random().toString(36).su
 export function useNotifications() {
   const [notifications, setNotifications] = useState([]);
 
+
+  
+
   const addNotification = useCallback((notification) => {
     const newNotification = {
       id: generateId(),

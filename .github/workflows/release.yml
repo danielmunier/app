@@ -15,38 +15,36 @@ jobs:
 
     steps:
 
-      # 1️⃣ Checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Bun
+  
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      # 3️⃣ Instalação das dependências
       - name: Install dependencies
         run: bun install
 
-      # 4️⃣ Build do frontend
+    
       - name: Build frontend
         run: bun run build
 
-      # 5️⃣ Build do Electron
+
       - name: Build Electron app
         run: |
-          $env:GH_TOKEN='${{ secrets.GH_TOKEN }}'
+          $env:GH_TOKEN='${{ secrets.GITHUB_TOKEN }}'   
           bun run build:electron
         shell: pwsh
         env:
           NODE_ENV: production
 
-      # 6️⃣ Cria release no GitHub
+   
       - name: Create GitHub Release and upload artifacts
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}           
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           draft: false
@@ -56,14 +54,3 @@ jobs:
             release/*.exe
             release/*.yml
           overwrite: true
-
-      # 7️⃣ Copia os arquivos de release para /docs
-      - name: Copy release files to docs
-        run: |
-          mkdir -p docs
-          cp release/* docs/
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add docs/*
-          git commit -m "Deploy release ${{ github.ref_name }} to docs" || echo "No changes"
-          git push origin main

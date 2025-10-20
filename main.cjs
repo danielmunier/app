@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, screen } = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 
@@ -16,6 +16,72 @@ ipcMain.on('download-update', () => {
     autoUpdater.downloadUpdate();
   }
 });
+
+function showCustomNotification(title, message) {
+  const { width } = screen.getPrimaryDisplay().workAreaSize;
+
+  const notif = new BrowserWindow({
+    width: 280,
+    height: 140,
+    x: width - 300,
+    y: 40,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    focusable: false,
+    hasShadow: false,
+    webPreferences: { contextIsolation: true },
+  });
+
+  notif.loadURL(
+    `data:text/html;charset=utf-8,${encodeURIComponent(`
+      <html>
+        <body style="
+          margin:0;
+          width:100%;
+          height:100%;
+          background: rgba(0,0,0,0);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          overflow:hidden;
+        ">
+          <div style="
+            border-radius: 32px;
+            backdrop-filter: blur(12px);
+            padding: 14px 20px;
+            width: calc(100% - 18px);
+            height: calc(100% - 18px);
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            color: #ff69b4;
+            font-family: 'Poppins', 'Comic Sans MS', sans-serif;
+            text-align:center;
+            animation: fadeIn 0.3s ease-out;
+          ">
+            <h3 style="margin:0;font-size:15px;">${title} 💫</h3>
+            <p style="margin:4px 0 0;font-size:13px;">${message}</p>
+          </div>
+          <style>
+            @keyframes fadeIn {
+              from { opacity:0; transform:translateY(-10px); }
+              to { opacity:1; transform:translateY(0); }
+            }
+          </style>
+        </body>
+      </html>
+    `)}`
+  );
+
+  notif.once("ready-to-show", () => notif.showInactive());
+  setTimeout(() => {
+    if (!notif.isDestroyed()) notif.close();
+  }, 4000);
+}
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -38,9 +104,11 @@ function createWindow() {
 
   if (!app.isPackaged) {
     win.loadURL('http://localhost:5173');
+  showCustomNotification('Lori', `Bem-vinda de volta!`);
+
    win.webContents.openDevTools();
   } else {
-    // Usar loadURL com file:// para melhor compatibilidade com roteamento
+ 
     const indexPath = path.join(__dirname, 'dist/index.html');
     win.loadURL(`file://${indexPath}`);
   }
@@ -61,6 +129,8 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
+
+
 
 
 ipcMain.on('window-minimize', () => {
@@ -89,7 +159,6 @@ ipcMain.on('window-close', () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
-
 
 
 autoUpdater.setFeedURL({
