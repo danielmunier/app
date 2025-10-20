@@ -2,10 +2,12 @@ import React, { useState, useCallback } from 'react';
 import './Gallery.css';
 import { useImages } from '../../hooks/useImages';
 import { ImageUpload } from '../../components/ImageUpload/ImageUpload';
+import Modal from '../../components/Modal/Modal';
 
 export default function Gallery() {
     const { images, addImage, loading, error } = useImages();
     const [dragActive, setDragActive] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const handleFiles = useCallback(async (files) => {
         const fileArray = Array.from(files);
@@ -42,6 +44,15 @@ export default function Gallery() {
         }
     };
 
+    const handleImageClick = (imageData) => {
+        setSelectedImage(imageData);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedImage(null);
+    };
+
+
     return (
         <div 
             className={`gallery ${dragActive ? 'drag-active' : ''}`}
@@ -59,6 +70,8 @@ export default function Gallery() {
                             <img 
                                 src={imageData.url} 
                                 alt={imageData.originalName}
+                                onClick={() => handleImageClick(imageData)}
+                                style={{ cursor: 'pointer' }}
                                 onError={(e) => {
                                     e.target.src = '/cat_bunny.png'; 
                                 }}
@@ -86,6 +99,22 @@ export default function Gallery() {
                             onImageAdd={addImage}
                             loading={loading}
                             error={error}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Modal para visualizar imagem */}
+            {selectedImage && (
+                <div className="image-modal-overlay" onClick={handleCloseModal}>
+                    <div className="image-modal-container" onClick={(e) => e.stopPropagation()}>
+                        <img 
+                            src={selectedImage.url} 
+                            alt={selectedImage.originalName}
+                            className="modal-image"
+                            onError={(e) => {
+                                e.target.src = '/cat_bunny.png'; 
+                            }}
                         />
                     </div>
                 </div>
