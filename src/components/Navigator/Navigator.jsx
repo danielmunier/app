@@ -1,8 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme";
-import { GiChatBubble, GiHouse, GiMoon, GiPaintBrush, GiPhotoCamera, GiSun } from "react-icons/gi";
+import {  GiHouse, GiMoon, GiPaintBrush, GiPhotoCamera, GiSun } from "react-icons/gi";
 import { BsPin, BsPinFill, BsChevronDown, BsChevronUp } from "react-icons/bs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./Navigator.css";
 import { BiChat } from "react-icons/bi";
 import { FaTasks } from "react-icons/fa";
