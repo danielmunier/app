@@ -5,7 +5,6 @@ import { ThemeProvider } from "./context/ThemeContext";
 import TitleBar from "./components/TitleBar";
 import Navigator from "./components/Navigator/Navigator";
 
-// importe suas páginas
 import Home from "./pages/home/Home";
 import Test from "./pages/Test";
 import Chat from "./pages/chat/Chat";
@@ -18,7 +17,6 @@ function AppContent() {
   const { isDarkMode } = useTheme();
   const location = useLocation();
 
-  // Determinar orientação e posição do Navigator baseado na rota
   const isVertical = location.pathname === "/chat";
   const orientation = isVertical ? "vertical" : "horizontal";
   const position = isVertical ? "right" : "bottom";
@@ -41,15 +39,15 @@ function AppContent() {
       <main
         style={{
           position: "absolute",
-          top: "50px",
+          top: "30px",
           left: 0,
           right: 0,
-          padding: "10px",
           bottom: 0,
           zIndex: 10,
           overflow: "auto",
         }}
       >
+         
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/test" element={<Test />} />

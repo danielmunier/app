@@ -1,0 +1,70 @@
+.water-tracker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--nav-bg);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--nav-shadow);
+  width: fit-content;
+  margin: 20px auto;
+}
+
+.water-title {
+  font-size: 1rem;
+  color: var(--nav-text);
+  margin-bottom: 4px;
+}
+
+.water-cups {
+  display: flex;
+  gap: 8px;
+}
+
+.cup {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cup:hover {
+  transform: translateY(-3px);
+}
+
+.cup.filled {
+  color: #4fd1c5;
+  transform: scale(1.1);
+}
+
+.water-progress {
+  font-size: 0.9rem;
+  color: var(--nav-text);
+  opacity: 0.8;
+}
+
+.reset-btn {
+  margin-top: 4px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: var(--nav-text);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* remove o anel azul */
+*:focus,
+*:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}

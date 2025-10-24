@@ -1,6 +1,12 @@
+import { useState } from "react";
+import { BsPin, BsPinFill } from "react-icons/bs";
 import "./TitleBar.css";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { useTheme } from "../hooks/useTheme";
 
 export default function TitleBar() {
+  const [isPinned, setIsPinned] = useState(false);
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleWindowControl = (action) => {
     if (window.electronAPI?.windowControl) {
@@ -10,14 +16,39 @@ export default function TitleBar() {
     }
   };
 
+  
+
+  const handlePin = async () => {
+    try {
+      const result = await window.electronAPI.windowControl.togglePin();
+      setIsPinned(result);
+    } catch (error) {
+      console.error("Erro ao alternar pin:", error);
+    }
+  };
 
   return (
     <div className="titlebar">
       <div className="titlebar-left">
-        {/* Espaço vazio - notificações movidas para o Navigator */}
+     <button
+          className={`titlebar-btn pin ${isPinned ? "active" : ""}`}
+          title={isPinned ? "Desafixar janela" : "Fixar janela"}
+          onClick={handlePin}
+        >
+          {isPinned ? <BsPinFill size={13} /> : <BsPin size={13} />}
+        </button>
+     <button
+          className={`titlebar-btn pin ${isDarkMode ? "active" : ""}`}
+          title={isPinned ? "Desafixar janela" : "Fixar janela"}
+          onClick={toggleTheme}
+        >
+          {isDarkMode ? <SunIcon size={13} />: <MoonIcon size={13} /> }
+        </button>
       </div>
 
       <div className="titlebar-right">
+       
+
         <button
           className="titlebar-btn"
           title="Minimizar"

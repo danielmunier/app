@@ -1,624 +1,146 @@
-/* 🎀 Container principal */
+/* WRAPPER GERAL */
+.nav-wrapper {
+  position: fixed;
+  bottom: clamp(20px, 4vh, 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  transition: bottom 0.45s cubic-bezier(0.25, 1, 0.3, 1),
+              opacity 0.3s ease;
+  z-index: 30;
+}
+
+/* QUANDO ESCONDE, desce tudo pra fora da tela */
+.nav-wrapper.nav-hidden {
+  bottom: -80px; /* desliza suavemente pra baixo */
+  opacity: 0.7;
+}
+
+/* CONTAINER INTERNO */
+.nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* BOTÃO SUPERIOR */
+.toggle-nav-btn {
+  color: var(--nav-text);
+  border-radius: 10px;
+  padding: 4px 10px;
+  font-size: 1.2rem;
+  background: none;
+  transition: all 0.3s ease;
+}
+
+.toggle-nav-btn:hover {
+  cursor: pointer;
+  border:none;
+  transform: translateY(-1px);
+}
+.toggle-nav-btn:hover:focus {
+  cursor: pointer;
+  border:none;
+  transform: translateY(-1px);
+}
+
+
+/* NAVBAR PRINCIPAL */
 .cute-nav {
-    display: flex;
-    gap: 14px;
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 16px;
-    padding: 10px 16px;
-    z-index: 15;
-    backdrop-filter: blur(6px);
-    background: var(--nav-bg);
-    box-shadow: var(--nav-shadow);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    WebkitAppRegion: no-drag;
-    max-width: calc(100vw - 40px);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 10px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.35s ease, margin-bottom 0.45s cubic-bezier(0.25, 1, 0.3, 1);
+}
 
-  /* Layout vertical */
-  .cute-nav.vertical {
-    flex-direction: column;
-    gap: 10px;
-    padding: 16px 10px;
-    max-width: none;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
+/* Efeito de esconder (fade + leve descida) */
+.nav-wrapper.nav-hidden .cute-nav {
+  opacity: 0;
+  margin-bottom: 10px;
+  pointer-events: none;
+}
 
-  /* Posicionamento vertical - lado direito */
-  .cute-nav.vertical.right {
-    right: 20px;
-    top: 50%;
-    left: auto;
-    bottom: auto;
-    transform: translateY(-50%);
-    border-radius: 12px;
-  }
+/* BOTÕES */
+.cute-nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--nav-btn-bg);
+  box-shadow: var(--nav-btn-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nav-text);
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
 
-  /* Posicionamento vertical - lado esquerdo */
-  .cute-nav.vertical.left {
-    left: 20px;
-    top: 50%;
-    right: auto;
-    bottom: auto;
-    transform: translateY(-50%);
-    border-radius: 12px;
-  }
+.cute-nav-btn:hover {
+  border: 1px solid var(--nav-border);
+  transform: translateY(-3px);
+}
 
-  /* Esconder o navigator horizontal */
-  .cute-nav.hidden {
-    transform: translateX(-50%) translateY(calc(100% + 40px));
-    opacity: 0;
-    pointer-events: none;
-  }
+.cute-nav-btn.active {
+  border: 1px solid var(--nav-border);
+}
 
-  /* Esconder o navigator vertical - lado direito */
-  .cute-nav.vertical.right.hidden {
-    transform: translateY(-50%) translateX(calc(100% + 40px));
-    opacity: 0;
-    pointer-events: none;
-  }
+/* ÍCONES */
+.cute-nav-icon {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  /* Esconder o navigator vertical - lado esquerdo */
-  .cute-nav.vertical.left.hidden {
-    transform: translateY(-50%) translateX(calc(-100% - 40px));
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Esconder scrollbar */
-  .cute-nav::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* 🌼 Botão */
-  .cute-nav-btn {
-    width: 70px;
-    height: 70px;
-    border-radius: 12px;
-    background: var(--nav-btn-bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: var(--nav-btn-shadow);
-    transition: all 0.25s ease;
-    padding: 0;
-    margin: 0;
-    position: relative;
-  }
-  
-  /* Hover */
-  .cute-nav-btn:hover {
-    transform: translateY(-1px);
-    border: none;
-  }
-  .cute-nav-btn:focus {
-    outline: none;
-  }
-
-  /* Ativo */
-  .cute-nav-btn.active {
-    background: var(--nav-btn-active-bg);
-
-  }
-  
-  /* 🌈 Ícone */
-  .cute-nav-icon {
-    font-size: 32px;
-    margin: 0;
-    padding: 0;
-    color: var(--nav-text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* ===== MOBILE ===== */
+@media (max-width: 568px) {
+  .nav-wrapper {
+    left: 0;
+    right: 0;
+    transform: none;
+    bottom: 0;
     width: 100%;
-    height: 100%;
-    line-height: 1;
-    /* Efeito pixel art */
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
-    /* Adiciona um pouco de "chunkiness" */
-    filter: contrast(1.1) saturate(1.1);
-  }
-  
-  /* 🌸 Texto */
-  .cute-nav-label {
-    font-size: 12px;
-    font-weight: bold;
-    color: var(--nav-text);
+    transition: bottom 0.45s cubic-bezier(0.25, 1, 0.3, 1);
   }
 
-  /* Botão de esconder/mostrar */
-  .cute-nav-btn.hide-toggle {
-    background: var(--nav-btn-bg);
-    border: 2px solid var(--nav-text);
-    opacity: 0.8;
+  .nav-wrapper.nav-hidden .cute-nav {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+  .nav-wrapper.nav-hidden {
+    bottom: -90px;
   }
 
-  .cute-nav-btn.hide-toggle:hover {
-    opacity: 1;
-    transform: translateY(-2px);
-    background: var(--nav-btn-active-bg);
+  .nav {
+    width: 100%;
+    gap: 0;
   }
 
-  .cute-nav-btn.hide-toggle .cute-nav-icon {
-    font-size: 20px;
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-  }
-
-  /* Notificações no Navigator */
-  .cute-nav-btn.notification-toggle {
-    position: relative;
-  }
-
-  .notification-badge {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    font-size: 9px;
-    width: 14px;
-    height: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .notification-panel {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 280px;
-    max-height: 400px;
-    background: var(--nav-bg);
-    color: var(--nav-text);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    box-shadow: var(--nav-shadow);
-    z-index: 1000;
-    padding: 8px 0;
-    overflow-y: auto;
-    backdrop-filter: blur(8px);
-  }
-
-  /* Posicionamento do painel de notificações para layout vertical */
-  .cute-nav.vertical.right ~ .notification-panel {
-    right: 100px;
-    left: auto;
-    transform: none;
-    bottom: 50%;
-    top: auto;
-    transform: translateY(50%);
-  }
-
-  .cute-nav.vertical.left ~ .notification-panel {
-    left: 100px;
-    right: auto;
-    transform: none;
-    bottom: 50%;
-    top: auto;
-    transform: translateY(50%);
-  }
-
-  .notification-item {
-    padding: 10px 12px;
-    font-size: 13px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    cursor: default;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .notification-item:last-child {
-    border-bottom: none;
-  }
-
-  .notification-item:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  .notification-content {
-    flex: 1;
-    margin-right: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .notification-title {
-    font-weight: 500;
-    color: var(--nav-text);
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .notification-message {
-    font-size: 11px;
-    color: #bbb;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    margin-top: 2px;
-  }
-
-  .notification-time {
-    font-size: 10px;
-    color: #888;
-    margin-top: 2px;
-  }
-
-  .notification-delete-btn {
-    background: transparent;
+  .toggle-nav-btn {
+    width: 100%;
     border: none;
-    color: #bbb;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 2px;
-    border-radius: 4px;
   }
 
-  .notification-delete-btn:hover {
-    color: #ff4d4d;
-    background: rgba(255, 77, 77, 0.1);
+  .cute-nav {
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 10px;
+    justify-content: space-around;
   }
 
-  .notification-empty {
-    padding: 20px;
-    font-size: 12px;
-    color: #aaa;
-    text-align: center;
+  .cute-nav-btn {
+    flex: 1;
+    height: 56px;
+    border-radius: 12px;
   }
-
-  /* 📱 Media Queries para Responsividade */
-
-  /* Tablets grandes e desktops pequenos */
-  @media (max-width: 1024px) {
-    .cute-nav {
-      gap: 12px;
-      padding: 8px 14px;
-      bottom: 25px;
-    }
-    
-    .cute-nav-btn {
-      width: 65px;
-      height: 65px;
-    }
-    
-    .cute-nav-icon {
-      font-size: 28px;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-    }
-
-    /* Ajustes para Navigator vertical em tablets */
-    .cute-nav.vertical {
-      gap: 8px;
-      padding: 12px 8px;
-    }
-
-    .cute-nav.vertical.right {
-      right: 15px;
-    }
-
-    .cute-nav.vertical.left {
-      left: 15px;
-    }
-  }
-
-  /* Tablets */
-  @media (max-width: 768px) {
-    .cute-nav {
-      gap: 10px;
-      padding: 6px 12px;
-      bottom: 20px;
-      max-width: calc(100vw - 20px);
-    }
-    
-    .cute-nav-btn {
-      width: 60px;
-      height: 60px;
-      border-radius: 10px;
-    }
-    
-    .cute-nav-icon {
-      font-size: 24px;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-    }
-    
-    .cute-nav-label {
-      font-size: 10px;
-    }
-
-    /* Ajustes para Navigator vertical em tablets */
-    .cute-nav.vertical {
-      gap: 6px;
-      padding: 10px 6px;
-      max-width: none;
-    }
-
-    .cute-nav.vertical.right {
-      right: 10px;
-    }
-
-    .cute-nav.vertical.left {
-      left: 10px;
-    }
-  }
-
-  /* Smartphones grandes */
-  @media (max-width: 480px) {
-    .cute-nav {
-      gap: 8px;
-      padding: 5px 10px;
-      bottom: 15px;
-      max-width: calc(100vw - 10px);
-      border-radius: 12px;
-    }
-    
-    .cute-nav-btn {
-      width: 55px;
-      height: 55px;
-      border-radius: 8px;
-      min-width: 55px;
-      flex-shrink: 0;
-    }
-    
-    .cute-nav-icon {
-      font-size: 24px;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-    }
-    
-    .cute-nav-label {
-      font-size: 9px;
-    }
-
-    /* Ajustes para Navigator vertical em smartphones */
-    .cute-nav.vertical {
-      gap: 4px;
-      padding: 8px 4px;
-      max-width: none;
-      max-height: calc(100vh - 80px);
-    }
-
-    .cute-nav.vertical.right {
-      right: 5px;
-    }
-
-    .cute-nav.vertical.left {
-      left: 5px;
-    }
-
-    .cute-nav.vertical .cute-nav-btn {
-      width: 50px;
-      height: 50px;
-      min-width: 50px;
-    }
-
-    .cute-nav.vertical .cute-nav-icon {
-      font-size: 20px;
-    }
-  }
-
-  /* Smartphones pequenos */
-  @media (max-width: 360px) {
-    .cute-nav {
-      gap: 6px;
-      padding: 4px 8px;
-      bottom: 10px;
-      max-width: calc(100vw - 5px);
-    }
-    
-    .cute-nav-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 6px;
-      min-width: 50px;
-    }
-    
-    .cute-nav-icon {
-      font-size: 22px;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-    }
-    
-    .cute-nav-label {
-      font-size: 8px;
-    }
-  }
-
-  /* Landscape em dispositivos móveis */
-  @media (max-height: 500px) and (orientation: landscape) {
-    .cute-nav {
-      bottom: 10px;
-      padding: 4px 8px;
-      gap: 6px;
-    }
-    
-    .cute-nav-btn {
-      width: 50px;
-      height: 50px;
-      min-width: 50px;
-    }
-    
-    .cute-nav-icon {
-      font-size: 22px;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-    }
-    
-    .cute-nav-label {
-      font-size: 8px;
-    }
-  }
-
-  /* Melhorias para telas muito pequenas */
-  @media (max-width: 320px) {
-    .cute-nav {
-      gap: 4px;
-      padding: 3px 6px;
-      bottom: 8px;
-      max-width: calc(100vw - 2px);
-    }
-    
-    .cute-nav-btn {
-      width: 45px;
-      height: 45px;
-      border-radius: 5px;
-      min-width: 45px;
-    }
-    
-    .cute-nav-icon {
-      font-size: 20px;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-    }
-    
-    .cute-nav-label {
-      font-size: 7px;
-    }
-  }
-
-  /* Melhorias para hover em dispositivos touch */
-  @media (hover: none) and (pointer: coarse) {
-    .cute-nav-btn:hover {
-      transform: none;
-    }
-    
-    .cute-nav-btn:active {
-      transform: scale(0.95);
-      transition: transform 0.1s ease;
-    }
-  }
-
-  /* Ajustes para telas de alta resolução */
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .cute-nav {
-      backdrop-filter: blur(8px);
-    }
-  }
-
-  /* Botão flutuante para mostrar o Navigator */
-  .show-navigator-btn {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--nav-bg);
-    backdrop-filter: blur(6px);
-    border: 2px solid var(--nav-text);
-    box-shadow: var(--nav-shadow);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: var(--nav-text);
-    font-size: 20px;
-    animation: pulse 2s infinite;
-  }
-
-  /* Botão flutuante para layout vertical */
-  .show-navigator-btn.vertical-right {
-    right: 20px;
-    top: 50%;
-    left: auto;
-    bottom: auto;
-    transform: translateY(-50%);
-  }
-
-  .show-navigator-btn.vertical-left {
-    left: 20px;
-    top: 50%;
-    right: auto;
-    bottom: auto;
-    transform: translateY(-50%);
-  }
-
-  .show-navigator-btn:hover {
-    transform: translateX(-50%) translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    background: var(--nav-btn-active-bg);
-  }
-
-  .show-navigator-btn:active {
-    transform: translateX(-50%) scale(0.95);
-  }
-
-  /* Hover para botão flutuante vertical */
-  .show-navigator-btn.vertical-right:hover {
-    transform: translateY(-50%) translateX(-2px);
-  }
-
-  .show-navigator-btn.vertical-right:active {
-    transform: translateY(-50%) scale(0.95);
-  }
-
-  .show-navigator-btn.vertical-left:hover {
-    transform: translateY(-50%) translateX(2px);
-  }
-
-  .show-navigator-btn.vertical-left:active {
-    transform: translateY(-50%) scale(0.95);
-  }
-
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
-    }
-    70% {
-      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-    }
-  }
-
-  /* Responsividade para o botão flutuante */
-  @media (max-width: 768px) {
-    .show-navigator-btn {
-      width: 50px;
-      height: 50px;
-      font-size: 22px;
-      bottom: 15px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .show-navigator-btn {
-      width: 45px;
-      height: 45px;
-      font-size: 20px;
-      bottom: 10px;
-    }
-  }
-  
+}
