@@ -1,0 +1,188 @@
+/* ===== Base ===== */
+
+.board {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.board {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.board::-webkit-scrollbar {
+  height: 6px;
+}
+.board::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+.board::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ===== Column ===== */
+.column {
+  background: #fafafa;
+  border-radius: 16px;
+  padding: 16px;
+  width: 280px;
+  min-height: 400px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.column:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.column-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.add-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+.add-btn:hover {
+  color: #000;
+}
+
+.column-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ===== Task Card ===== */
+.task-card {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.task-card:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-title {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #333;
+  cursor: text;
+  word-break: break-word;
+}
+
+.task-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.delete-btn:hover {
+  color: #e74c3c;
+}
+
+/* ===== Drag and Drop ===== */
+.task-card.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+  cursor: grabbing;
+}
+
+.column.drag-over {
+  background-color: #eef6ff;
+  border: 2px dashed #3b82f6;
+}
+
+/* ===== Responsividade ===== */
+
+/* Tablets (ainda horizontal) */
+@media (max-width: 900px) {
+  .board {
+    gap: 16px;
+    padding: 10px;
+  }
+
+  .column {
+    width: 240px;
+    min-height: 360px;
+  }
+}
+
+/* Celulares - muda para layout VERTICAL */
+@media (max-width: 700px) {
+  .app {
+    padding: 10px;
+  }
+
+  .board {
+    flex-direction: column;        /* ← muda o eixo para vertical */
+    overflow-x: hidden;
+    overflow-y: auto;
+    gap: 16px;
+    height: 100%;
+  }
+
+  .column {
+    width: 100%;                   /* ocupa toda a largura */
+    min-height: auto;
+    flex-shrink: 1;
+  }
+
+  .column-header {
+    justify-content: space-between;
+  }
+
+  .column-content {
+    max-height: none;
+  }
+}

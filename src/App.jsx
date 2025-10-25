@@ -10,8 +10,7 @@ import Test from "./pages/Test";
 import Chat from "./pages/chat/Chat";
 import Draw from "./pages/draw/draw";
 import Gallery from "./pages/gallery/Gallery";
-import Tasks from "./pages/tasks/Tasks";
-import WeekKanban from "./pages/tasks/WeekKanban";
+import Tasks from "./pages/tasks/Task";
 
 function AppContent() {
   const { isDarkMode } = useTheme();
@@ -55,7 +54,6 @@ function AppContent() {
           <Route path="/draw" element={<Draw />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/tasks" element={<Tasks />} />
-          <Route path="/tasks/week/:weekId" element={<WeekKanban />} />
         </Routes>
       </main>
     </div>
