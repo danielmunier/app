@@ -19,9 +19,8 @@
 }
 
 .upload-area:hover {
-    border-color: #007bff;
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: var(--nav-text);
+    box-shadow: 0 1px 24px rgba(0, 0, 0, 0.15);
 }
 
 .upload-area.drag-active {

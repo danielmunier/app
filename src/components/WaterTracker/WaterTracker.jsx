@@ -1,56 +1,41 @@
-import { useEffect, useState } from "react";
-import { FaGlassWhiskey } from "react-icons/fa";
 import "./WaterTracker.css";
+import { LuGlassWater } from "react-icons/lu";
+import { useWater } from "../../hooks/useWater";
 
-export default function WaterTracker({ totalCups = 5 }) {
-  const getInitialState = () => {
-    try {
-      const savedData = JSON.parse(localStorage.getItem("waterTracker"));
-      const today = new Date().toDateString();
-
-      if (savedData && savedData.date === today) {
-        return savedData.cupsDrank;
-      }
-    } catch (e) {
-      console.error("Erro lendo waterTracker:", e);
-    }
-    return 0; // fallback
-  };
-
-  const [cupsDrank, setCupsDrank] = useState(getInitialState);
-
-  // 🔹 sincroniza sempre que muda
-  useEffect(() => {
-    const today = new Date().toDateString();
-    localStorage.setItem(
-      "waterTracker",
-      JSON.stringify({ cupsDrank, date: today })
-    );
-  }, [cupsDrank]);
-
-  const drinkCup = (index) => {
-    // alterna entre marcar e desmarcar o último copo
-    setCupsDrank((prev) => (index + 1 === prev ? index : index + 1));
-  };
-
-  const resetCups = () => setCupsDrank(0);
-
+export default function WaterTracker({ totalCups = 6 }) {
+  const { cups, toggleCup, percent } = useWater(totalCups, 10000); 
   return (
     <div className="water-tracker">
-
       <div className="water-cups">
-        {Array.from({ length: totalCups }).map((_, i) => (
+        {cups.map((filled, i) => (
           <button
             key={i}
-            className={`cup ${i < cupsDrank ? "filled" : ""}`}
-            onClick={() => drinkCup(i)}
+            className={`cup-button ${filled ? "filled" : ""}`}
+            onClick={() => toggleCup(i)}
           >
-            <FaGlassWhiskey size={28} />
+            <div className="cup-icon-wrapper">
+              <LuGlassWater
+                size={36}
+                strokeWidth={2.3}
+                style={{
+                  color: filled ? "#00ccff" : "rgba(255,255,255,0.5)",
+                  filter: filled
+                    ? "drop-shadow(0 0 2px rgba(107,225,255,0.95))"
+                    : "none",
+                  transition: "all 0.25s ease",
+                }}
+              />
+              {!filled && <span className="cup-badge" />}
+            </div>
           </button>
         ))}
       </div>
 
-
+      <div className="progress-container">
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${percent}%` }} />
+        </div>
+      </div>
     </div>
   );
 }

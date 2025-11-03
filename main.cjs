@@ -17,14 +17,17 @@ ipcMain.on('download-update', () => {
   }
 });
 
-function showCustomNotification(title, message) {
-  const { width } = screen.getPrimaryDisplay().workAreaSize;
+function showCustomNotification(title, message, emoji = "💧") {
+  const notifWidth = 320;
+const notifHeight = 150;
+
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
   const notif = new BrowserWindow({
-    width: 280,
-    height: 140,
-    x: width - 300,
-    y: 40,
+    width: 320,
+    height: 150,
+  x: Math.round((width - notifWidth) / 2),   // centraliza horizontalmente
+  y: Math.round((height - notifHeight) / 2), // centraliza verticalmente
     frame: false,
     transparent: true,
     resizable: false,
@@ -38,40 +41,100 @@ function showCustomNotification(title, message) {
   notif.loadURL(
     `data:text/html;charset=utf-8,${encodeURIComponent(`
       <html>
-        <body style="
-          margin:0;
-          width:100%;
-          height:100%;
-          background: rgba(0,0,0,0);
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          overflow:hidden;
-        ">
-          <div style="
-            border-radius: 32px;
-            backdrop-filter: blur(12px);
-            padding: 14px 20px;
-            width: calc(100% - 18px);
-            height: calc(100% - 18px);
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            color: #ff69b4;
-            font-family: 'Poppins', 'Comic Sans MS', sans-serif;
-            text-align:center;
-            animation: fadeIn 0.3s ease-out;
-          ">
-            <h3 style="margin:0;font-size:15px;">${title} 💫</h3>
-            <p style="margin:4px 0 0;font-size:13px;">${message}</p>
-          </div>
+        <head>
           <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
+              background: transparent;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              overflow: hidden;
+              font-family: 'Poppins', system-ui, sans-serif;
+            }
+
+            .notif {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              text-align: center;
+              backdrop-filter: blur(14px);
+              -webkit-backdrop-filter: blur(14px);
+              border-radius: 24px;
+              color: #fff;
+              animation: fadeIn 0.4s ease-out, slideIn 0.5s ease-out;
+              position: relative;
+            }
+
+            /* 🔵 círculo interno */
+            .circle {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              background: rgba(255, 105, 180, 0.8); /* rosa translúcido */
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 22px;
+              color: white;
+              box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+              margin-bottom: 10px;
+              animation: pulse 1.8s infinite ease-in-out;
+            }
+
+            h3 {
+              margin: 4px 0 4px;
+              font-size: 15px;
+              font-weight: 500;
+              color: #fff;
+              text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            }
+
+            p {
+              margin: 0;
+              font-size: 12px;
+              color: rgba(255, 255, 255, 0.8);
+            }
+
             @keyframes fadeIn {
-              from { opacity:0; transform:translateY(-10px); }
-              to { opacity:1; transform:translateY(0); }
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+
+            @keyframes slideIn {
+              from { transform: translateY(-20px) scale(0.97); }
+              to { transform: translateY(0) scale(1); }
+            }
+
+            @keyframes fadeOut {
+              to { opacity: 0; transform: translateY(-10px); }
+            }
+
+            @keyframes pulse {
+              0%, 100% { transform: scale(1); opacity: 1; }
+              50% { transform: scale(1.1); opacity: 0.85; }
             }
           </style>
+        </head>
+        <body>
+          <div class="notif" id="notif">
+            <div class="circle">${emoji}</div>
+            <h3>${title}</h3>
+            <p>${message}</p>
+          </div>
+
+          <script>
+            setTimeout(() => {
+              const el = document.getElementById('notif');
+              el.style.animation = 'fadeOut 0.4s ease forwards';
+            }, 3600);
+          </script>
         </body>
       </html>
     `)}`
@@ -82,6 +145,7 @@ function showCustomNotification(title, message) {
     if (!notif.isDestroyed()) notif.close();
   }, 4000);
 }
+
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -104,7 +168,6 @@ function createWindow() {
 
   if (!app.isPackaged) {
     win.loadURL('http://localhost:5173');
-  showCustomNotification('Lori', `Bem-vinda de volta!`);
 
    win.webContents.openDevTools();
   } else {
@@ -131,7 +194,9 @@ app.whenReady().then(() => {
 });
 
 
-
+ipcMain.handle('show-notification', (event, { title, message }) => {
+  showCustomNotification(title, message);
+});
 
 ipcMain.on('window-minimize', () => {
   const win = BrowserWindow.getFocusedWindow();

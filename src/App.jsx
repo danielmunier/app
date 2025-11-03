@@ -11,11 +11,15 @@ import Chat from "./pages/chat/Chat";
 import Draw from "./pages/draw/draw";
 import Gallery from "./pages/gallery/Gallery";
 import Tasks from "./pages/tasks/Task";
+import Providers from "./providers";
+import { useWaterReminder } from "./components/WaterTracker/useWaterReminder";
+
 
 function AppContent() {
+      useWaterReminder(10000); 
+
   const { isDarkMode } = useTheme();
   const location = useLocation();
-
   const isVertical = location.pathname === "/chat";
   const orientation = isVertical ? "vertical" : "horizontal";
   const position = isVertical ? "right" : "bottom";
@@ -31,7 +35,8 @@ function AppContent() {
         transition: "color 0.5s ease",
       }}
     >
-    <TitleBar />
+
+      <TitleBar />
       <Navigator orientation={orientation} position={position} />
       <Background />
 
@@ -46,7 +51,7 @@ function AppContent() {
           overflow: "auto",
         }}
       >
-         
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/test" element={<Test />} />
@@ -62,10 +67,12 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ThemeProvider>
+    <Providers>
       <HashRouter>
         <AppContent />
       </HashRouter>
-    </ThemeProvider>
+    </Providers>
+
+
   );
 }

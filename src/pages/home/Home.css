@@ -1,7 +1,10 @@
 .home-container {
   padding: 10px;
   max-width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-direction: column;
   margin: 0 auto;
   background: transparent;
-  min-height: 100vh;
 }

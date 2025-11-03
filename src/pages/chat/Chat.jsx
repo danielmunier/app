@@ -28,6 +28,7 @@ export default function Chat() {
       <webview
         ref={webviewRef}
         src="https://chat.openai.com/"
+        partition="persist:chatgpt" 
         style={{
           width: "100%",
           height: "100%",
