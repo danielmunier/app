@@ -12,9 +12,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   checkForUpdates: () => ipcRenderer.send('check-for-updates'),
   downloadUpdate: () => ipcRenderer.send('download-update'),
 
-  // 🆕 NOVO: função para notificação visual
+  // Notificação de hidratação
   showNotification: (title, message) =>
     ipcRenderer.invoke('show-notification', { title, message }),
+  dismissWaterNotification: () =>
+    ipcRenderer.invoke('dismiss-water-notification'),
 
   versions: {
     chrome: () => process.versions.chrome,

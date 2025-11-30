@@ -1,9 +1,9 @@
 import "./WaterTracker.css";
 import { LuGlassWater } from "react-icons/lu";
-import { useWater } from "../../hooks/useWater";
+import { useWaterContext } from "../../context/WaterProvider";
 
-export default function WaterTracker({ totalCups = 6 }) {
-  const { cups, toggleCup, percent } = useWater(totalCups, 10000); 
+export default function WaterTracker() {
+  const { cups, toggleCup, percent } = useWaterContext(); 
   return (
     <div className="water-tracker">
       <div className="water-cups">

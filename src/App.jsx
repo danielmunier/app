@@ -16,7 +16,7 @@ import { useWaterReminder } from "./components/WaterTracker/useWaterReminder";
 
 
 function AppContent() {
-      useWaterReminder(10000); 
+      useWaterReminder(2 * 60 * 60 * 1000); // 2 horas 
 
   const { isDarkMode } = useTheme();
   const location = useLocation();

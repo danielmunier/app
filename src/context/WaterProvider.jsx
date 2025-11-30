@@ -21,7 +21,14 @@ export function WaterProvider({ totalCups = 6, children }) {
   const toggleCup = useCallback((index) => {
     setCups((prev) => {
       const newCups = [...prev];
+      const wasEmpty = !prev[index];
       newCups[index] = !newCups[index];
+
+      // Se marcou como "bebido", fecha a notificação imediatamente
+      if (wasEmpty && newCups[index]) {
+        window.electronAPI?.dismissWaterNotification();
+      }
+
       return newCups;
     });
   }, []);

@@ -3,6 +3,7 @@ const path = require('path');
 const { autoUpdater } = require('electron-updater');
 
 let mainWindow = null;
+let notificationWindow = null; // Referência da notificação de hidratação
 
 ipcMain.handle('get-app-version', () => app.getVersion());
 
@@ -18,16 +19,20 @@ ipcMain.on('download-update', () => {
 });
 
 function showCustomNotification(title, message, emoji = "💧") {
-  const notifWidth = 320;
-const notifHeight = 150;
+  // Se já houver uma notificação aberta, não abre outra
+  if (notificationWindow && !notificationWindow.isDestroyed()) {
+    return;
+  }
 
+  const notifWidth = 320;
+  const notifHeight = 150;
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
   const notif = new BrowserWindow({
-    width: 320,
-    height: 150,
-  x: Math.round((width - notifWidth) / 2),   // centraliza horizontalmente
-  y: Math.round((height - notifHeight) / 2), // centraliza verticalmente
+    width: notifWidth,
+    height: notifHeight,
+    x: Math.round((width - notifWidth) / 2),
+    y: Math.round((height - notifHeight) / 2),
     frame: false,
     transparent: true,
     resizable: false,
@@ -37,6 +42,9 @@ const notifHeight = 150;
     hasShadow: false,
     webPreferences: { contextIsolation: true },
   });
+
+  // Guarda referência para poder fechar depois
+  notificationWindow = notif;
 
   notif.loadURL(
     `data:text/html;charset=utf-8,${encodeURIComponent(`
@@ -72,12 +80,11 @@ const notifHeight = 150;
               position: relative;
             }
 
-            /* 🔵 círculo interno */
             .circle {
               width: 50px;
               height: 50px;
               border-radius: 50%;
-              background: rgba(255, 105, 180, 0.8); /* rosa translúcido */
+              background: rgba(255, 105, 180, 0.8);
               display: flex;
               align-items: center;
               justify-content: center;
@@ -130,10 +137,11 @@ const notifHeight = 150;
           </div>
 
           <script>
+            // Fecha automaticamente após 3 minutos (180000ms)
             setTimeout(() => {
               const el = document.getElementById('notif');
               el.style.animation = 'fadeOut 0.4s ease forwards';
-            }, 3600);
+            }, 179600);
           </script>
         </body>
       </html>
@@ -141,9 +149,20 @@ const notifHeight = 150;
   );
 
   notif.once("ready-to-show", () => notif.showInactive());
+
+  // Auto-fecha após 3 minutos (180000ms)
   setTimeout(() => {
     if (!notif.isDestroyed()) notif.close();
-  }, 4000);
+    if (notificationWindow === notif) notificationWindow = null;
+  }, 180000);
+}
+
+// Fecha a notificação de hidratação imediatamente
+function dismissWaterNotification() {
+  if (notificationWindow && !notificationWindow.isDestroyed()) {
+    notificationWindow.close();
+    notificationWindow = null;
+  }
 }
 
 
@@ -196,6 +215,11 @@ app.whenReady().then(() => {
 
 ipcMain.handle('show-notification', (event, { title, message }) => {
   showCustomNotification(title, message);
+});
+
+// Fecha a notificação de hidratação quando o usuário bebe água
+ipcMain.handle('dismiss-water-notification', () => {
+  dismissWaterNotification();
 });
 
 ipcMain.on('window-minimize', () => {
