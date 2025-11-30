@@ -1,10 +1,8 @@
 import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import Background from "./components/Background/Background";
 import { useTheme } from "./hooks/useTheme";
-import { ThemeProvider } from "./context/ThemeContext";
 import TitleBar from "./components/TitleBar";
 import Navigator from "./components/Navigator/Navigator";
-
 import Home from "./pages/home/Home";
 import Test from "./pages/Test";
 import Chat from "./pages/chat/Chat";
@@ -14,9 +12,10 @@ import Tasks from "./pages/tasks/Task";
 import Providers from "./providers";
 import { useWaterReminder } from "./components/WaterTracker/useWaterReminder";
 
+const TWO_HOURS = 2 * 60 * 60 * 1000;
 
 function AppContent() {
-      useWaterReminder(2 * 60 * 60 * 1000); // 2 horas 
+  useWaterReminder(TWO_HOURS);
 
   const { isDarkMode } = useTheme();
   const location = useLocation();
