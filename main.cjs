@@ -206,6 +206,12 @@ function createWindow() {
 
 
 app.whenReady().then(() => {
+  // Configura para iniciar com o Windows
+  app.setLoginItemSettings({
+    openAtLogin: true,
+    path: app.getPath('exe'),
+  });
+
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
