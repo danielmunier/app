@@ -1,7 +1,7 @@
 {
   "name": "meu-app",
   "private": true,
-  "version": "1.4.5",
+  "version": "1.5.0",
   "type": "module",
   "main": "main.cjs",
   "scripts": {
@@ -63,6 +63,9 @@
     ],
     "nsis": {
       "artifactName": "MeuApp-Setup-${version}.${ext}"
+    },
+    "win": {
+      "signAndEditExecutable": false
     }
   }
 }

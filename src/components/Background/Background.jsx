@@ -12,15 +12,12 @@ export default function Background() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d", { alpha: false });
-    ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = true;
 
-    let scale = 4;
-    let width = Math.floor(window.innerWidth / scale);
-    let height = Math.floor(window.innerHeight / scale);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
 
     let stars = [];
     let shootingStars = [];
@@ -34,16 +31,14 @@ export default function Background() {
 
     function calculateStarCount() {
       const area = width * height;
-      return Math.max(80, Math.floor(area / 1500));
+      return Math.max(100, Math.floor(area / 8000));
     }
 
     function resize() {
-      width = Math.floor(window.innerWidth / scale);
-      height = Math.floor(window.innerHeight / scale);
+      width = window.innerWidth;
+      height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
 
       const newStarCount = calculateStarCount();
 
@@ -76,8 +71,8 @@ export default function Background() {
       reset() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.size = Math.random() * 0.7 + 0.3;
-        this.baseOpacity = Math.random() * 0.6 + 0.3;
+        this.size = Math.random() * 2 + 1;
+        this.baseOpacity = Math.random() * 0.7 + 0.3;
         this.opacity = this.baseOpacity;
         this.time = Math.random() * 1000;
       }
@@ -105,8 +100,8 @@ export default function Background() {
       }
 
       draw() {
-        const parallaxX = mouseX * 10 * this.parallaxDepth;
-        const parallaxY = mouseY * 10 * this.parallaxDepth;
+        const parallaxX = mouseX * 20 * this.parallaxDepth;
+        const parallaxY = mouseY * 20 * this.parallaxDepth;
 
         // aplicar flare (brilho + tamanho)
         const flareFactor = this.flare ? 1 + this.flareProgress * 0.8 : 1;
@@ -114,15 +109,18 @@ export default function Background() {
 
         const color = displayMode
           ? `rgba(255,255,255,${this.opacity * brightnessBoost})`
-          : `rgba(255,230,200,${this.opacity * brightnessBoost})`;
+          : `rgba(180,140,160,${this.opacity * brightnessBoost})`;
 
-        ctx.fillStyle = color;
-        ctx.fillRect(
+        ctx.beginPath();
+        ctx.arc(
           this.x + parallaxX,
           this.y + parallaxY,
           this.size * flareFactor,
-          this.size * flareFactor
+          0,
+          Math.PI * 2
         );
+        ctx.fillStyle = color;
+        ctx.fill();
       }
     }
 
@@ -134,24 +132,36 @@ export default function Background() {
       reset() {
         this.x = Math.random() * width;
         this.y = Math.random() * height * 0.5;
-        this.len = Math.random() * 30 + 10;
-        this.speed = Math.random() * 2 + 0.5;
+        this.len = Math.random() * 80 + 40;
+        this.speed = Math.random() * 4 + 2;
         this.angle = Math.PI / 4;
         this.alpha = 1;
       }
       update() {
         this.x += this.speed * Math.cos(this.angle);
         this.y += this.speed * Math.sin(this.angle);
-        this.alpha -= 0.01;
+        this.alpha -= 0.008;
         if (this.alpha <= 0 || this.x > width || this.y > height) this.reset();
       }
       draw() {
-        ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
-        for (let i = 0; i < this.len; i++) {
-          const x = this.x - i * Math.cos(this.angle);
-          const y = this.y - i * Math.sin(this.angle);
-          ctx.fillRect(x, y, 1, 1);
-        }
+        const gradient = ctx.createLinearGradient(
+          this.x, this.y,
+          this.x - this.len * Math.cos(this.angle),
+          this.y - this.len * Math.sin(this.angle)
+        );
+        gradient.addColorStop(0, `rgba(255,255,255,${this.alpha})`);
+        gradient.addColorStop(1, `rgba(255,255,255,0)`);
+
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(
+          this.x - this.len * Math.cos(this.angle),
+          this.y - this.len * Math.sin(this.angle)
+        );
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.stroke();
       }
     }
 
@@ -166,7 +176,7 @@ export default function Background() {
       const delta = time - lastTime;
       lastTime = time;
 
-      ctx.fillStyle = displayMode ? "#0d0d1a" : "#b0a8ff";
+      ctx.fillStyle = displayMode ? "#0d0d1a" : "#e8b4c8";
       ctx.fillRect(0, 0, width, height);
 
       for (let s of stars) {

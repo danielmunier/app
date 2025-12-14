@@ -1,109 +1,185 @@
-.water-tracker {
+.water-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  background: var(--water-card-bg);
   border-radius: 16px;
-  padding: 20px;
-  color: #fff;
-  width: 300px;
-  margin: auto;
+  padding: 16px 24px 20px;
+  width: 150px;
+  gap: 4px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--water-card-border, transparent);
 }
 
-.water-cups {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
+.water-card.completed {
+  background: var(--water-card-completed-bg);
 }
 
-.cup-button {
-  background: none;
-  cursor: pointer;
-  border: none;
-  transition: transform 0.2s ease;
+.water-card-time {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--water-text-primary);
+  letter-spacing: 0.5px;
 }
 
+.water-card-text {
+  font-size: 0.8rem;
+  color: var(--water-text-secondary);
+  margin-bottom: 6px;
+}
 
-.cup-image {
+/* === Copo de agua === */
+.water-glass {
+  position: relative;
   width: 70px;
-  height: auto;
-  transition: opacity 1s ease;
-}
-
-/* Barra de progresso */
-.progress-container {
-  width: 100%;
-  margin-top: 10px;
-  text-align: center;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #6be1ff, #a6faff);
-  border-radius: 10px;
-  transition: width 0.3s ease;
-}
-
-.progress-text {
-  display: block;
-  margin-top: 6px;
-  font-size: 0.9rem;
-  color: #fff;
-}
-
-.reset-btn {
-  margin-top: 12px;
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.reset-btn:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-.cup-icon-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
+  height: 85px;
+  display: flex;
+  align-items: flex-end;
   justify-content: center;
 }
 
-/* 🔴 Bolinha vermelha de “lembrete” */
-.cup-badge {
+.glass-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: visible;
+}
+
+/* Borda do copo - formato conico */
+.glass-body::before {
+  content: "";
   position: absolute;
   top: 0;
-  right: 0;
-  width: 9px;
-  height: 9px;
-  background-color: #ff4c4c;
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
-  animation: pulse 1.5s ease-in-out infinite;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 58px;
+  height: 100%;
+  border: 2.5px solid #4ec5e0;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
+  z-index: 2;
 }
 
-/* ✨ animação sutil de batimento */
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: scale(1.3);
-    opacity: 0.5;
-  }
+/* Agua */
+.water-fill {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52px;
+  background: linear-gradient(180deg,
+    #6ee4f7 0%,
+    #4dd4ec 20%,
+    #35c5de 40%,
+    #28b8d4 60%,
+    #1fa8c5 80%,
+    #1899b8 100%
+  );
+  border-radius: 0 0 10px 10px;
+  clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
+  transition: height 0.5s ease;
+  overflow: hidden;
+}
+
+/* Reflexo branco vertical no lado esquerdo */
+.water-fill::before {
+  content: "";
+  position: absolute;
+  top: 8%;
+  left: 15%;
+  width: 4px;
+  height: 75%;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.7) 0%,
+    rgba(255,255,255,0.5) 30%,
+    rgba(255,255,255,0.3) 60%,
+    rgba(255,255,255,0.1) 100%
+  );
+  border-radius: 2px;
+  z-index: 3;
+}
+
+/* Brilho sutil no topo da agua */
+.water-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+  z-index: 2;
+}
+
+.water-wave {
+  display: none;
+}
+
+/* === Botao === */
+.water-add-btn {
+  margin-top: 10px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  background: #3b9ece;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.water-add-btn:hover:not(:disabled) {
+  background: #4ab0de;
+}
+
+.water-add-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.water-add-btn:disabled {
+  background: #4caf50;
+  cursor: default;
+}
+
+.water-reset-btn {
+  margin-top: 4px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--water-reset-bg);
+  color: var(--water-reset-color);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.water-reset-btn:hover {
+  background: rgba(255, 100, 100, 0.2);
+  color: #e53e3e;
+}
+
+/* Light mode - card claro */
+:root {
+  --water-card-bg: #ffffff;
+  --water-card-completed-bg: #e8f5e9;
+  --water-card-border: #e0e4ea;
+  --water-text-primary: #1a202c;
+  --water-text-secondary: #718096;
+  --water-reset-bg: rgba(0, 0, 0, 0.05);
+  --water-reset-color: #718096;
+}
+
+/* Dark mode - card roxo */
+[data-theme="dark"] {
+  --water-card-bg: #252250;
+  --water-card-completed-bg: #1e3a2f;
+  --water-card-border: #3d3a6d;
+  --water-text-primary: #ffffff;
+  --water-text-secondary: #a0aec0;
+  --water-reset-bg: rgba(255, 255, 255, 0.1);
+  --water-reset-color: rgba(255, 255, 255, 0.5);
 }

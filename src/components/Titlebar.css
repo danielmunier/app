@@ -1,6 +1,5 @@
 .titlebar {
   width: 100%;
-  background: var(--titlebar-bg);
   height: 32px;
   display: flex;
   align-items: center;
@@ -9,7 +8,6 @@
   -webkit-user-select: none;
   user-select: none;
   -webkit-app-region: drag;
-  padding: 0 10px;
   box-sizing: border-box;
 }
 

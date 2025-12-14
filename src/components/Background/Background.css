@@ -12,18 +12,11 @@
   align-items: center;
 }
 
-/* ===== Canvas com estilo pixelado ===== */
+/* ===== Canvas suave ===== */
 .stars-canvas {
   display: block;
   width: 100%;
   height: 100%;
-
-  /* mantém o pixel art nítido */
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-
-  /* um pouco de contraste e brilho pra dar “vida” */
-  filter: contrast(1.2) brightness(1.1);
   transition: filter 0.3s ease;
 }
 
@@ -46,19 +39,10 @@
   );
 }
 
-/* ===== Efeitos de transição quando muda o tema ===== */
-.background-container.dark .stars-canvas {
-  filter: contrast(1.2) brightness(0.9);
-}
-
-.background-container.light .stars-canvas {
-  filter: contrast(1.1) brightness(1.2);
-}
-
 /* ===== Responsividade ===== */
 @media (max-width: 768px) {
   .stars-canvas {
-    filter: contrast(1.1) brightness(1.1);
+    /* mobile adjustments if needed */
   }
 }
 

@@ -28,15 +28,15 @@ export function useWaterReminder(interval = 60000) {
   // Função de reminder (estável)
   const remindToDrink = useCallback(() => {
     const currentCups = cupsRef.current;
-    const empty = currentCups.filter((c) => !c).length;
+    const remaining = currentCups.filter((c) => !c).length;
 
-    // Só notifica se houver copos vazios
-    if (empty > 0) {
+    // Só notifica se não tiver completado a meta
+    if (remaining > 0) {
       window.electronAPI?.showNotification("", "Hora de beber água 💧");
       addNotification({
         type: NOTIFICATION_TYPES.INFO,
         title: "Hora de se hidratar 💧",
-        message: `Você ainda tem ${empty} copo(s) para beber hoje!`,
+        message: "Beba um copo de água agora!",
       });
     }
   }, [addNotification]);

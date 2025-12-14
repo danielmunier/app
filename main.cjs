@@ -178,8 +178,8 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       webviewTag: true,
-      contextIsolation: true, 
-      nodeIntegration: false, 
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   });
 

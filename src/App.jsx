@@ -37,7 +37,6 @@ function AppContent() {
 
       <TitleBar />
       <Navigator orientation={orientation} position={position} />
-      <Background />
 
       <main
         style={{

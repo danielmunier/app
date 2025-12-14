@@ -1,7 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { GiHouse, GiPaintBrush, GiPhotoCamera } from "react-icons/gi";
-import { BiChat, BiPhone, BiPhotoAlbum } from "react-icons/bi";
-import { FaTasks } from "react-icons/fa";
+import { GoHome } from "react-icons/go";
+import { BiPhotoAlbum } from "react-icons/bi";
+import { IoChatbubbleOutline } from "react-icons/io5";
+import { LuListTodo } from "react-icons/lu";
+import { HiOutlinePaintBrush } from "react-icons/hi2";
 import "./Navigator.css";
 
 export default function Navigator() {
@@ -9,14 +11,11 @@ export default function Navigator() {
   const { pathname } = useLocation();
 
   const navItems = [
-    { path: "/", icon: <GiHouse /> },
+    { path: "/", icon: <GoHome /> },
     { path: "/gallery", icon: <BiPhotoAlbum /> },
-
-    // ÍCONE CENTRAL
-    { path: "/chat", icon: <BiChat />, isCenter: true },
-
-    { path: "/tasks", icon: <FaTasks /> },
-    { path: "/draw", icon: <GiPaintBrush /> },
+    { path: "/chat", icon: <IoChatbubbleOutline /> },
+    { path: "/tasks", icon: <LuListTodo /> },
+    { path: "/draw", icon: <HiOutlinePaintBrush /> },
   ];
 
   return (
@@ -26,9 +25,7 @@ export default function Navigator() {
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className={`cute-nav-btn ${
-              item.isCenter ? "center" : ""
-            } ${pathname === item.path ? "active" : ""}`}
+            className={`cute-nav-btn ${pathname === item.path ? "active" : ""}`}
           >
             <div className="icon">{item.icon}</div>
           </button>
