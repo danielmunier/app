@@ -103,8 +103,8 @@ export default function Gallery() {
                             </div>
                         </div>
                     ))}
-                    <div className="image-item">
-                        <ImageUpload 
+                    <div className="image-item upload-item">
+                        <ImageUpload
                             onImageAdd={addImage}
                             loading={loading}
                             error={error}

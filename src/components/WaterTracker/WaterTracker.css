@@ -5,11 +5,12 @@
   background: var(--water-card-bg);
   border-radius: 16px;
   padding: 16px 24px 20px;
-  width: 150px;
+  width: 200px;
   gap: 4px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--water-card-border, transparent);
+  box-sizing: border-box;
 }
 
 .water-card.completed {
@@ -182,4 +183,11 @@
   --water-text-secondary: #a0aec0;
   --water-reset-bg: rgba(255, 255, 255, 0.1);
   --water-reset-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsividade - esticar em mobile */
+@media (max-width: 600px) {
+  .water-card {
+    width: 100%;
+  }
 }

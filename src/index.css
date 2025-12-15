@@ -145,6 +145,27 @@ button:focus-visible {
   --card-border: #e0e4ea;
   --text-primary: #1a202c;
   --text-secondary: #718096;
+
+  --page-padding: 20px;
+}
+
+/* ========== RESPONSIVE PADDING ========== */
+@media (max-width: 768px) {
+  :root {
+    --page-padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --page-padding: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --page-padding: 8px;
+  }
 }
 
 /* ========== DARK MODE (Purple/Violet) ========== */

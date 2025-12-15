@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { FiPlus } from 'react-icons/fi';
 import './ImageUpload.css';
 
 export function ImageUpload({ onImageAdd, loading, error }) {
@@ -78,10 +79,7 @@ export function ImageUpload({ onImageAdd, loading, error }) {
                         </div>
                     ) : (
                         <>
-                            <p className="upload-text">
-                                
-                            </p>
-                          
+                            <FiPlus className="upload-icon" />
                         </>
                     )}
                 </div>
