@@ -4,8 +4,7 @@
   align-items: center;
   background: var(--water-card-bg);
   border-radius: 16px;
-  padding: 16px 24px 20px;
-  width: 200px;
+  padding: 16px;
   gap: 4px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -163,6 +162,26 @@
   color: #e53e3e;
 }
 
+/* === Streak badge === */
+.water-streak-badge {
+  font-size: 0.75rem;
+  color: var(--water-text-secondary);
+  background: var(--water-reset-bg);
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-top: 4px;
+}
+
+.water-card.completed .water-streak-badge {
+  background: rgba(76, 175, 80, 0.2);
+  color: #2e7d32;
+}
+
+[data-theme="dark"] .water-card.completed .water-streak-badge {
+  background: rgba(76, 175, 80, 0.3);
+  color: #81c784;
+}
+
 /* Light mode - card claro */
 :root {
   --water-card-bg: #ffffff;
@@ -183,11 +202,4 @@
   --water-text-secondary: #a0aec0;
   --water-reset-bg: rgba(255, 255, 255, 0.1);
   --water-reset-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Responsividade - esticar em mobile */
-@media (max-width: 600px) {
-  .water-card {
-    width: 100%;
-  }
 }

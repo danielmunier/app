@@ -1,0 +1,151 @@
+/* ===== QuickNotes Card ===== */
+.quick-notes-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.quick-notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quick-notes-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.notes-count {
+  background: var(--nav-btn-bg);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* ===== Input ===== */
+.quick-notes-input {
+  display: flex;
+  gap: 8px;
+}
+
+.quick-notes-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--nav-btn-bg);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.quick-notes-input input:focus {
+  border-color: var(--nav-text);
+}
+
+.quick-notes-input input::placeholder {
+  color: var(--text-secondary);
+}
+
+.quick-notes-input button {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--nav-text);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.quick-notes-input button:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.quick-notes-input button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Notes List ===== */
+.quick-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.quick-note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--nav-btn-bg);
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.quick-note-item:hover {
+  transform: translateX(4px);
+}
+
+.note-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-delete {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.quick-note-item:hover .note-delete {
+  opacity: 1;
+}
+
+.note-delete:hover {
+  color: #ef4444;
+}
+
+.no-notes,
+.more-notes {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin: 8px 0 0;
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .quick-notes-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}

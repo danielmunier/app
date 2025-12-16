@@ -2,7 +2,7 @@ import "./WaterTracker.css";
 import { useWaterContext } from "../../context/WaterProvider";
 
 export default function WaterTracker() {
-  const { addDrink, resetDrinks, GLASS_ML, percent, goalReached } = useWaterContext();
+  const { addDrink, resetDrinks, GLASS_ML, percent, goalReached, waterStreak } = useWaterContext();
 
   // Horário atual formatado
   const now = new Date();
@@ -21,6 +21,13 @@ export default function WaterTracker() {
           </div>
         </div>
       </div>
+
+      {/* Streak badge */}
+      {waterStreak > 0 && (
+        <div className="water-streak-badge">
+          💧 {waterStreak} {waterStreak === 1 ? "dia" : "dias"}
+        </div>
+      )}
 
       <button
         className="water-add-btn"

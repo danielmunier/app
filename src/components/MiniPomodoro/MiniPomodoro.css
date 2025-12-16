@@ -1,0 +1,138 @@
+/* ===== MiniPomodoro Card ===== */
+.pomodoro-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.pomodoro-card.break {
+  border-color: #10b981;
+}
+
+.pomodoro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.pomodoro-mode {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--nav-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pomodoro-card.break .pomodoro-mode {
+  color: #10b981;
+}
+
+.pomodoro-sessions {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ===== Timer Circular ===== */
+.pomodoro-timer {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.progress-ring-bg {
+  fill: none;
+  stroke: var(--card-border);
+  stroke-width: 6;
+}
+
+.progress-ring-fill {
+  fill: none;
+  stroke: var(--nav-text);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.pomodoro-card.break .progress-ring-fill {
+  stroke: #10b981;
+}
+
+.timer-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Controls ===== */
+.pomodoro-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.pomodoro-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--nav-btn-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pomodoro-btn:hover {
+  transform: scale(1.1);
+  background: var(--nav-btn-hover-bg);
+}
+
+.pomodoro-btn.play {
+  background: var(--nav-text);
+  color: white;
+}
+
+.pomodoro-btn.pause {
+  background: #f59e0b;
+  color: white;
+}
+
+.pomodoro-btn.reset {
+  font-size: 1rem;
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .pomodoro-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .progress-ring-fill {
+  stroke: #a78bfa;
+}
+
+[data-theme="dark"] .pomodoro-btn.play {
+  background: #a78bfa;
+}

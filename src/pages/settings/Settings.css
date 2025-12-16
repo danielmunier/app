@@ -1,0 +1,183 @@
+.settings-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--page-padding);
+  box-sizing: border-box;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.settings-back {
+  background: var(--nav-btn-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.settings-back:hover {
+  background: var(--nav-btn-hover-bg);
+}
+
+/* ===== Content ===== */
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== Section ===== */
+.settings-section {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section h2 {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== Item ===== */
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-item-info label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.settings-item-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.settings-item select {
+  padding: 8px 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--nav-btn-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  min-width: 120px;
+}
+
+.settings-item select:focus {
+  border-color: var(--nav-text);
+}
+
+.settings-coming-soon {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ===== Time Picker ===== */
+.time-picker {
+  display: flex;
+  align-items: center;
+  background: var(--nav-btn-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.time-picker input {
+  width: 36px;
+  padding: 6px 2px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.time-picker input::-webkit-outer-spin-button,
+.time-picker input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.time-picker input:focus {
+  background: var(--card-border);
+  border-radius: 4px;
+}
+
+.time-separator {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* ===== Version ===== */
+.settings-version {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  padding: 16px 0;
+  opacity: 0.6;
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .settings-section {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 500px) {
+  .settings-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .settings-item select {
+    width: 100%;
+  }
+}

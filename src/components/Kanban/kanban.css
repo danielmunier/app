@@ -11,6 +11,7 @@
 
 .board {
   display: flex;
+  justify-content: center;
   gap: 20px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -50,7 +51,6 @@
   box-sizing: border-box;
 }
 .column:hover {
-  transform: translateY(-2px);
   box-shadow: var(--kanban-column-shadow-hover);
 }
 
