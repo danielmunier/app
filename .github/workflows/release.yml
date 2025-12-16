@@ -27,6 +27,16 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\AppData\Local\electron\Cache
+            ~\.cache\electron
+          key: electron-${{ runner.os }}-${{ hashFiles('package.json') }}
+          restore-keys: |
+            electron-${{ runner.os }}-
+
     
       - name: Build frontend
         run: bun run build

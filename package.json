@@ -1,7 +1,7 @@
 {
   "name": "meu-app",
   "private": true,
-  "version": "1.5.0",
+  "version": "1.6.1",
   "type": "module",
   "main": "main.cjs",
   "scripts": {
@@ -45,6 +45,9 @@
   "build": {
     "appId": "com.danielmunier.meuapp",
     "productName": "MeuApp",
+    "electronDownload": {
+      "mirror": "https://npmmirror.com/mirrors/electron/"
+    },
     "directories": {
       "output": "release"
     },
