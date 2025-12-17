@@ -33,6 +33,7 @@ jobs:
           path: |
             ~\AppData\Local\electron\Cache
             ~\.cache\electron
+            .cache/electron-builder
           key: electron-${{ runner.os }}-${{ hashFiles('package.json') }}
           restore-keys: |
             electron-${{ runner.os }}-
@@ -44,11 +45,13 @@ jobs:
 
       - name: Build Electron app
         run: |
-          $env:GH_TOKEN='${{ secrets.GITHUB_TOKEN }}'   
+          $env:GH_TOKEN='${{ secrets.GITHUB_TOKEN }}'
           bun run build:electron
         shell: pwsh
         env:
           NODE_ENV: production
+          ELECTRON_MIRROR: https://npmmirror.com/mirrors/electron/
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
 
    
       - name: Create GitHub Release and upload artifacts
