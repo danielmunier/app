@@ -1,0 +1,30 @@
+/* ===== AffirmationCard ===== */
+.affirmation-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  min-height: 100px;
+}
+
+.affirmation-icon {
+  font-size: 1.2rem;
+}
+
+.affirmation-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .affirmation-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
