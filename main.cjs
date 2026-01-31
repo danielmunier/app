@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, screen, shell } = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 
@@ -197,6 +197,7 @@ function createWindow() {
 
   win.once('ready-to-show', () => {
     win.show();
+    shell.openExternal('https://cabeca.vercel.app/');
     autoUpdater.checkForUpdatesAndNotify();
   });
 
